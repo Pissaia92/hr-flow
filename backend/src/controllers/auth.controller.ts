@@ -16,6 +16,16 @@ export class AuthController {
         });
       }
 
+      // Validar role
+      const validRoles = ['employee', 'hr'];
+      const userRole = role ? role.toLowerCase() : 'employee';
+      
+      if (!validRoles.includes(userRole)) {
+        return res.status(400).json({
+          error: 'Role inválida. Use "employee" ou "hr"'
+        });
+      }
+
       // Verificar se usuário já existe
       const existingUser = await UserModel.findByEmail(email);
       if (existingUser) {
@@ -32,7 +42,7 @@ export class AuthController {
         name,
         email,
         password_hash,
-        role: role || 'employee'
+        role: userRole
       });
 
       if (!user) {
@@ -48,7 +58,7 @@ export class AuthController {
       });
 
       // Remover password_hash da resposta
-      const { password_hash: _, ...userResponse } = user;
+      const { password_hash: _, ...userResponse } = user as any;
 
       return res.status(201).json({
         message: 'Usuário criado com sucesso',
@@ -99,7 +109,7 @@ export class AuthController {
       });
 
       // Remover password_hash da resposta
-      const { password_hash: _, ...userResponse } = user;
+      const { password_hash: _, ...userResponse } = user as any;
 
       return res.status(200).json({
         message: 'Login realizado com sucesso',
@@ -128,7 +138,7 @@ export class AuthController {
       }
 
       // Remover password_hash da resposta
-      const { password_hash: _, ...userResponse } = user;
+      const { password_hash: _, ...userResponse } = user as any;
 
       return res.status(200).json({
         user: userResponse
