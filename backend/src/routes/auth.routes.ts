@@ -1,7 +1,9 @@
+import { EmailService } from '../services/email.service';
 import { Router } from 'express';
 import { AuthController } from '../controllers/auth.controller';
 import { AuthMiddleware } from '../middleware/auth.middleware';
 
+const emailService = new EmailService();
 const router = Router();
 
 /**
@@ -90,6 +92,34 @@ router.post('/register', AuthController.register);
  *         description: Erro interno do servidor
  */
 router.post('/login', AuthController.login);
+
+/**
+ * @swagger
+ * /auth/test-email:
+ *   post:
+ *     summary: Testa o envio de email
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Email de teste enviado com sucesso
+ *       500:
+ *         description: Erro ao enviar email de teste
+ */
+router.post('/test-email', AuthMiddleware.authenticate, async (req, res) => {
+  try {
+    const success = await emailService.sendTestEmail();
+    if (success) {
+      res.json({ message: 'Email de teste enviado com sucesso!' });
+    } else {
+      res.status(500).json({ error: 'Falha ao enviar email de teste' });
+    }
+  } catch (error) {
+    console.error('Erro no endpoint de teste de email:', error);
+    res.status(500).json({ error: 'Erro ao enviar email de teste' });
+  }
+});
 
 /**
  * @swagger
