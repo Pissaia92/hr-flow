@@ -10,38 +10,44 @@ export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [metrics, setMetrics] = useState<any>(null);
+  
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/login');
-      return;
-    }
+  // Solicitar permissão para notificações desktop
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
 
-    // Verificar token e obter perfil do usuário
-    fetch('http://localhost:3000/auth/profile', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.user) {
-        setUser(data.user);
-        loadMetrics(token);
-      } else {
-        localStorage.removeItem('token');
-        router.push('/login');
-      }
-      setLoading(false);
-    })
-    .catch(() => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    router.push('/login');
+    return;
+  }
+
+  // Verificar token e obter perfil do usuário
+  fetch('http://localhost:3000/auth/profile', {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.user) {
+      setUser(data.user);
+      loadMetrics(token);
+    } else {
       localStorage.removeItem('token');
       router.push('/login');
-      setLoading(false);
-    });
-  }, [router]);
+    }
+    setLoading(false);
+  })
+  .catch(() => {
+    localStorage.removeItem('token');
+    router.push('/login');
+    setLoading(false);
+  });
+}, [router]);
 
   const loadMetrics = async (token: string) => {
     try {
