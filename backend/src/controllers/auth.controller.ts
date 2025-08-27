@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { UserModel } from '../models/user.model';
 import { HashUtils } from '../utils/hash.utils';
 import { JwtUtils } from '../utils/jwt.utils';
+import { supabase } from '../config/supabase';
 
 export class AuthController {
   // Registro de novo usuário
@@ -13,16 +14,6 @@ export class AuthController {
       if (!name || !email || !password) {
         return res.status(400).json({
           error: 'Nome, email e senha são obrigatórios'
-        });
-      }
-
-      // Validar role
-      const validRoles = ['employee', 'hr'];
-      const userRole = role ? role.toLowerCase() : 'employee';
-      
-      if (!validRoles.includes(userRole)) {
-        return res.status(400).json({
-          error: 'Role inválida. Use "employee" ou "hr"'
         });
       }
 
@@ -42,7 +33,7 @@ export class AuthController {
         name,
         email,
         password_hash,
-        role: userRole
+        role: role || 'employee'
       });
 
       if (!user) {
@@ -146,6 +137,111 @@ export class AuthController {
 
     } catch (error) {
       console.error('Erro ao buscar perfil:', error);
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
+    }
+  }
+
+  // Atualizar perfil do usuário
+  static async updateProfile(req: Request, res: Response): Promise<Response> {
+    try {
+      const { name, email } = req.body;
+      const userId = req.user?.id;
+
+      // Validação básica
+      if (!name || !email) {
+        return res.status(400).json({
+          error: 'Nome e email são obrigatórios'
+        });
+      }
+
+      // Verificar se email já existe para outro usuário
+      const existingUser = await UserModel.findByEmail(email);
+      if (existingUser && existingUser.id !== userId) {
+        return res.status(409).json({
+          error: 'Email já está em uso por outro usuário'
+        });
+      }
+
+      // Atualizar usuário
+      const { data, error } = await supabase
+        .from('users')
+        .update({ name, email })
+        .eq('id', userId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Remover password_hash da resposta
+      const { password_hash: _, ...userResponse } = data;
+
+      return res.status(200).json({
+        message: 'Perfil atualizado com sucesso',
+        user: userResponse
+      });
+
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error);
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
+    }
+  }
+
+  // Alterar senha do usuário
+  static async changePassword(req: Request, res: Response): Promise<Response> {
+    try {
+      const { currentPassword, newPassword } = req.body;
+      const userId = req.user?.id;
+
+      // Validação básica
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+          error: 'Senha atual e nova senha são obrigatórias'
+        });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({
+          error: 'Nova senha deve ter pelo menos 6 caracteres'
+        });
+      }
+
+      // Buscar usuário atual
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).json({
+          error: 'Usuário não encontrado'
+        });
+      }
+
+      // Verificar senha atual
+      const isCurrentPasswordValid = HashUtils.verifyPassword(currentPassword, user.password_hash);
+      if (!isCurrentPasswordValid) {
+        return res.status(401).json({
+          error: 'Senha atual incorreta'
+        });
+      }
+
+      // Hash da nova senha
+      const newPasswordHash = HashUtils.hashPassword(newPassword);
+
+      // Atualizar senha
+      const { error } = await supabase
+        .from('users')
+        .update({ password_hash: newPasswordHash })
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      return res.status(200).json({
+        message: 'Senha alterada com sucesso'
+      });
+
+    } catch (error) {
+      console.error('Erro ao alterar senha:', error);
       return res.status(500).json({
         error: 'Erro interno do servidor'
       });

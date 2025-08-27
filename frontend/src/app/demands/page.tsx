@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import DemandsTable from '@/components/DemandsTable';
+import AdvancedSearch from '@/components/AdvancedSearch';
 
 export default function DemandsPage() {
   const [demands, setDemands] = useState<any[]>([]);
+  const [allDemands, setAllDemands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [searchParams, setSearchParams] = useState({});
   const router = useRouter();
 
   useEffect(() => {
@@ -54,12 +57,52 @@ export default function DemandsPage() {
       
       if (response.ok) {
         const data = await response.json();
+        setAllDemands(data.demands || data);
         setDemands(data.demands || data);
       }
     } catch (error) {
       console.error('Erro ao carregar demandas:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSearch = async (filters: any) => {
+    setSearchParams(filters);
+    
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      // Construir query string
+      const queryParams = new URLSearchParams();
+      Object.keys(filters).forEach(key => {
+        if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
+          if (Array.isArray(filters[key])) {
+            filters[key].forEach((value: string) => {
+              queryParams.append(key, value);
+            });
+          } else {
+            queryParams.append(key, filters[key]);
+          }
+        }
+      });
+
+      const response = await fetch(`http://localhost:3000/demands/search?${queryParams.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDemands(data.demands);
+      }
+    } catch (error) {
+      console.error('Erro na busca:', error);
     }
   };
 
@@ -176,6 +219,9 @@ export default function DemandsPage() {
               Nova Demanda
             </button>
           </div>
+
+          {/* Componente de Busca Avançada */}
+          <AdvancedSearch onSearch={handleSearch} />
 
           {/* Tabela de Demandas Avançada */}
           <DemandsTable 

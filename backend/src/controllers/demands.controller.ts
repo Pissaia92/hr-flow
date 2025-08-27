@@ -3,6 +3,7 @@ import { DemandModel } from '../models/demand.model';
 import { PriorityUtils } from '../utils/priority.utils';
 import { EmailService } from '../services/email.service';
 import { UserModel } from '../models/user.model';
+import { supabase } from '../config/supabase';
 
 // Instanciar o serviço de email
 const emailService = new EmailService();
@@ -181,6 +182,82 @@ export class DemandsController {
 
     } catch (error) {
       console.error('Erro ao deletar demanda:', error);
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
+    }
+  }
+
+  // Busca avançada de demandas
+  static async search(req: Request, res: Response): Promise<Response> {
+    try {
+      const { 
+        search, 
+        priority, 
+        status, 
+        dateFrom, 
+        dateTo, 
+        sortBy = 'created_at', 
+        sortOrder = 'desc' 
+      } = req.query;
+      
+      const userId = req.user?.id;
+      const userRole = req.user?.role;
+
+      // Construir query base
+      let query = supabase.from('demands').select('*');
+
+      // Filtrar por usuário (se não for RH)
+      if (userRole !== 'hr') {
+        query = query.eq('user_id', userId);
+      }
+
+      // Busca textual
+      if (search) {
+        const searchText = search.toString().toLowerCase();
+        query = query.or(`type.ilike.%${searchText}%,description.ilike.%${searchText}%`);
+      }
+
+      // Filtros de array
+      if (priority) {
+        const priorities = Array.isArray(priority) ? priority : [priority];
+        if (priorities.length > 0) {
+          query = query.in('priority', priorities);
+        }
+      }
+
+      if (status) {
+        const statuses = Array.isArray(status) ? status : [status];
+        if (statuses.length > 0) {
+          query = query.in('status', statuses);
+        }
+      }
+
+      // Filtros de data
+      if (dateFrom) {
+        query = query.gte('created_at', new Date(dateFrom.toString()).toISOString());
+      }
+
+      if (dateTo) {
+        // Adicionar um dia para incluir todo o dia final
+        const toDate = new Date(dateTo.toString());
+        toDate.setDate(toDate.getDate() + 1);
+        query = query.lt('created_at', toDate.toISOString());
+      }
+
+      // Ordenação
+      query = query.order(sortBy.toString(), { ascending: sortOrder === 'asc' });
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      return res.status(200).json({
+        demands: data
+      });
+
+    } catch (error) {
+      console.error('Erro na busca de demandas:', error);
       return res.status(500).json({
         error: 'Erro interno do servidor'
       });
