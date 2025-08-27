@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import DemandsTable from '@/components/DemandsTable';
 import AdvancedSearch from '@/components/AdvancedSearch';
+import ExportButton from '@/components/ExportButton';
 
 export default function DemandsPage() {
   const [demands, setDemands] = useState<any[]>([]);
   const [allDemands, setAllDemands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
-  const [searchParams, setSearchParams] = useState({});
   const router = useRouter();
 
   useEffect(() => {
@@ -68,8 +68,6 @@ export default function DemandsPage() {
   };
 
   const handleSearch = async (filters: any) => {
-    setSearchParams(filters);
-    
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -209,15 +207,22 @@ export default function DemandsPage() {
                 Gerencie todas as suas solicitações de RH
               </p>
             </div>
-            <button
-              onClick={() => router.push('/demands/new')}
-              className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
-            >
-              <svg className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              Nova Demanda
-            </button>
+            <div className="flex space-x-3">
+              <ExportButton 
+                data={demands} 
+                filename="demandas-hrflow" 
+                title="Relatório de Demandas HRFlow" 
+              />
+              <button
+                onClick={() => router.push('/demands/new')}
+                className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
+              >
+                <svg className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                </svg>
+                Nova Demanda
+              </button>
+            </div>
           </div>
 
           {/* Componente de Busca Avançada */}
