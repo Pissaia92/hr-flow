@@ -66,51 +66,72 @@ export class DemandsController {
     }
   }
 
-  // ... resto dos métodos (getAll, getByUser, getById, update, delete) permanecem iguais
-  // (incluídos aqui para completude, mas não mostrados para economizar espaço)
-  
+  // Listar todas as demandas (apenas para RH)
   static async getAll(req: Request, res: Response): Promise<Response> {
     try {
       const demands = await DemandModel.findAll();
-      return res.status(200).json({ demands });
+      
+      return res.status(200).json({
+        demands
+      });
+
     } catch (error) {
       console.error('Erro ao buscar demandas:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
     }
   }
 
+  // Listar demandas do usuário logado
   static async getByUser(req: Request, res: Response): Promise<Response> {
     try {
       const userId = req.user?.id;
       const demands = await DemandModel.findByUserId(userId);
-      return res.status(200).json({ demands });
+      
+      return res.status(200).json({
+        demands
+      });
+
     } catch (error) {
       console.error('Erro ao buscar demandas do usuário:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
     }
   }
 
+  // Buscar demanda por ID
   static async getById(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
       const demand = await DemandModel.findById(id);
       
       if (!demand) {
-        return res.status(404).json({ error: 'Demanda não encontrada' });
+        return res.status(404).json({
+          error: 'Demanda não encontrada'
+        });
       }
       
-      return res.status(200).json({ demand });
+      return res.status(200).json({
+        demand
+      });
+
     } catch (error) {
       console.error('Erro ao buscar demanda:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
     }
   }
 
+  // Atualizar demanda
   static async update(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
       const updates = req.body;
       
+      // Remover campos que não devem ser atualizados
       delete updates.id;
       delete updates.user_id;
       delete updates.created_at;
@@ -123,19 +144,25 @@ export class DemandsController {
       const demand = await DemandModel.update(id, updates);
       
       if (!demand) {
-        return res.status(404).json({ error: 'Demanda não encontrada' });
+        return res.status(404).json({
+          error: 'Demanda não encontrada'
+        });
       }
       
       return res.status(200).json({
         message: 'Demanda atualizada com sucesso',
         demand
       });
+
     } catch (error) {
       console.error('Erro ao atualizar demanda:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
     }
   }
 
+  // Deletar demanda
   static async delete(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
@@ -143,13 +170,20 @@ export class DemandsController {
       const demand = await DemandModel.update(id, { status: 'closed' });
       
       if (!demand) {
-        return res.status(404).json({ error: 'Demanda não encontrada' });
+        return res.status(404).json({
+          error: 'Demanda não encontrada'
+        });
       }
       
-      return res.status(200).json({ message: 'Demanda fechada com sucesso' });
+      return res.status(200).json({
+        message: 'Demanda fechada com sucesso'
+      });
+
     } catch (error) {
       console.error('Erro ao deletar demanda:', error);
-      return res.status(500).json({ error: 'Erro interno do servidor' });
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
     }
   }
 }

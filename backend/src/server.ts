@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import { specs } from './config/swagger';
 import authRoutes from './routes/auth.routes';
 import demandsRoutes from './routes/demands.routes';
-import metricsRoutes from './routes/metrics.routes'; // Adicionar esta linha
+import metricsRoutes from './routes/metrics.routes';
 
 const app: Application = express();
 const PORT = process.env.PORT || 3000;
@@ -40,7 +40,7 @@ app.get('/health', (req: Request, res: Response) => {
 // Rotas
 app.use('/auth', authRoutes);
 app.use('/demands', demandsRoutes);
-app.use('/metrics', metricsRoutes); // Adicionar esta linha
+app.use('/metrics', metricsRoutes);
 
 // Middleware de tratamento de erros
 app.use((err: any, req: Request, res: Response, next: any) => {

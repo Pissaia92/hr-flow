@@ -1,27 +1,57 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function NewDemandPage() {
+export default function EditDemandPage({ params }: { params: { id: string } }) {
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('normal');
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('open');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
-    // Verificar se usuário está autenticado
     const token = localStorage.getItem('token');
     if (!token) {
       router.push('/login');
+      return;
     }
-  }, [router]);
+
+    // Carregar dados da demanda
+    loadDemand(token);
+  }, [params.id]);
+
+  const loadDemand = async (token: string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/demands/${params.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setType(data.demand.type);
+        setDescription(data.demand.description);
+        setPriority(data.demand.priority);
+        setStatus(data.demand.status);
+      } else {
+        router.push('/demands');
+      }
+    } catch (err) {
+      console.error('Erro ao carregar demanda:', err);
+      router.push('/demands');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
     setError('');
 
     try {
@@ -31,8 +61,8 @@ export default function NewDemandPage() {
         return;
       }
 
-      const response = await fetch('http://localhost:3000/demands', {
-        method: 'POST',
+      const response = await fetch(`http://localhost:3000/demands/${params.id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -40,7 +70,8 @@ export default function NewDemandPage() {
         body: JSON.stringify({
           type,
           description,
-          priority
+          priority,
+          status
         }),
       });
 
@@ -49,18 +80,26 @@ export default function NewDemandPage() {
       if (response.ok) {
         router.push('/demands');
       } else {
-        setError(data.error || 'Erro ao criar demanda');
+        setError(data.error || 'Erro ao atualizar demanda');
       }
     } catch (err) {
       setError('Erro de conexão com o servidor');
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
 
   const handleCancel = () => {
     router.push('/demands');
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -105,10 +144,10 @@ export default function NewDemandPage() {
           <div className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden transition-all duration-300">
             <div className="px-6 py-6 sm:px-8 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Nova Demanda
+                Editar Demanda
               </h3>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Preencha os detalhes da sua nova demanda
+                Atualize os detalhes da sua demanda
               </p>
             </div>
             
@@ -189,9 +228,24 @@ export default function NewDemandPage() {
                       <option value="urgent">Urgente</option>
                     </select>
                   </div>
-                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    A prioridade pode ser ajustada automaticamente com base na descrição.
-                  </p>
+                </div>
+
+                <div>
+                  <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Status
+                  </label>
+                  <div className="mt-1">
+                    <select
+                      id="status"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                      className="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm py-3 px-4 transition-colors duration-200"
+                    >
+                      <option value="open">Aberta</option>
+                      <option value="in_progress">Em Progresso</option>
+                      <option value="closed">Fechada</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -205,19 +259,19 @@ export default function NewDemandPage() {
                 </button>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={saving}
                   className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
                 >
-                  {loading ? (
+                  {saving ? (
                     <>
                       <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Criando...
+                      Salvando...
                     </>
                   ) : (
-                    'Criar Demanda'
+                    'Salvar Alterações'
                   )}
                 </button>
               </div>

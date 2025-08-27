@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import DemandsTable from '@/components/DemandsTable';
 
 export default function DemandsPage() {
   const [demands, setDemands] = useState<any[]>([]);
@@ -62,39 +63,44 @@ export default function DemandsPage() {
     }
   };
 
+  const handleEdit = (id: string) => {
+    router.push(`/demands/${id}/edit`);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Tem certeza que deseja excluir esta demanda?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:3000/demands/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Recarregar demandas após exclusão
+        loadDemands(token);
+      } else {
+        alert('Erro ao excluir demanda');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir demanda:', error);
+      alert('Erro ao excluir demanda');
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     router.push('/login');
-  };
-
-  const getStatusBadge = (status: string) => {
-    const statusMap: any = {
-      'open': { text: 'Aberta', class: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' },
-      'in_progress': { text: 'Em Progresso', class: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200' },
-      'closed': { text: 'Fechada', class: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' }
-    };
-    
-    const config = statusMap[status] || { text: status, class: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' };
-    return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.class}`}>
-        {config.text}
-      </span>
-    );
-  };
-
-  const getPriorityBadge = (priority: string) => {
-    const priorityMap: any = {
-      'urgent': { text: 'Urgente', class: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200' },
-      'important': { text: 'Importante', class: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200' },
-      'normal': { text: 'Normal', class: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' }
-    };
-    
-    const config = priorityMap[priority] || { text: priority, class: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' };
-    return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.class}`}>
-        {config.text}
-      </span>
-    );
   };
 
   if (loading) {
@@ -171,96 +177,12 @@ export default function DemandsPage() {
             </button>
           </div>
 
-          {/* Tabela de Demandas */}
-          <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl overflow-hidden transition-all duration-300">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-750">
-                  <tr>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Tipo
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Descrição
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Prioridade
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                      Data
-                    </th>
-                    <th scope="col" className="relative px-6 py-4">
-                      <span className="sr-only">Ações</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-750">
-                  {demands.length > 0 ? (
-                    demands.map((demand) => (
-                      <tr 
-                        key={demand.id} 
-                        className="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-150"
-                      >
-                        <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                          {demand.type}
-                        </td>
-                        <td className="px-6 py-5 text-sm text-gray-700 dark:text-gray-300 max-w-md">
-                          <div className="truncate max-w-xs" title={demand.description}>
-                            {demand.description}
-                          </div>
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                          {getPriorityBadge(demand.priority)}
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                          {getStatusBadge(demand.status)}
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                          {new Date(demand.created_at).toLocaleDateString('pt-BR')}
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
-                          <button
-                            onClick={() => router.push(`/demands/${demand.id}`)}
-                            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 transition-colors duration-200"
-                          >
-                            Ver
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center">
-                        <div className="flex flex-col items-center justify-center">
-                          <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">Nenhuma demanda encontrada</h3>
-                          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            Comece criando sua primeira demanda.
-                          </p>
-                          <div className="mt-6">
-                            <button
-                              onClick={() => router.push('/demands/new')}
-                              className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                            >
-                              <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                              </svg>
-                              Nova Demanda
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          {/* Tabela de Demandas Avançada */}
+          <DemandsTable 
+            demands={demands} 
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         </div>
       </main>
     </div>

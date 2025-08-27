@@ -2,11 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import KPICard from '@/components/KPICard';
+import ChartSection from '@/components/ChartSection';
+import QuickActions from '@/components/QuickActions';
 
-export default function DemandsPage() {
-  const [demands, setDemands] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [metrics, setMetrics] = useState<any>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -16,7 +19,7 @@ export default function DemandsPage() {
       return;
     }
 
-    // Verificar perfil do usuário
+    // Verificar token e obter perfil do usuário
     fetch('http://localhost:3000/auth/profile', {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -26,39 +29,34 @@ export default function DemandsPage() {
     .then(data => {
       if (data.user) {
         setUser(data.user);
-        loadDemands(token);
+        loadMetrics(token);
       } else {
         localStorage.removeItem('token');
         router.push('/login');
       }
+      setLoading(false);
     })
     .catch(() => {
       localStorage.removeItem('token');
       router.push('/login');
+      setLoading(false);
     });
   }, [router]);
 
-  const loadDemands = async (token: string) => {
+  const loadMetrics = async (token: string) => {
     try {
-      setLoading(true);
-      const endpoint = user?.role === 'hr' 
-        ? 'http://localhost:3000/demands' 
-        : 'http://localhost:3000/demands/me';
-      
-      const response = await fetch(endpoint, {
+      const metricsResponse = await fetch('http://localhost:3000/metrics/demands', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        setDemands(data.demands || data);
+      if (metricsResponse.ok) {
+        const metricsData = await metricsResponse.json();
+        setMetrics(metricsData.metrics);
       }
     } catch (error) {
-      console.error('Erro ao carregar demandas:', error);
-    } finally {
-      setLoading(false);
+      console.error('Erro ao carregar métricas:', error);
     }
   };
 
@@ -67,43 +65,37 @@ export default function DemandsPage() {
     router.push('/login');
   };
 
-  const getStatusBadge = (status: string) => {
-    const statusMap: any = {
-      'open': { text: 'Aberta', class: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100' },
-      'in_progress': { text: 'Em Progresso', class: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100' },
-      'closed': { text: 'Fechada', class: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' }
-    };
-    
-    const config = statusMap[status] || { text: status, class: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100' };
-    return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.class}`}>
-        {config.text}
-      </span>
-    );
-  };
-
-  const getPriorityBadge = (priority: string) => {
-    const priorityMap: any = {
-      'urgent': { text: 'Urgente', class: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100' },
-      'important': { text: 'Importante', class: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100' },
-      'normal': { text: 'Normal', class: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' }
-    };
-    
-    const config = priorityMap[priority] || { text: priority, class: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100' };
-    return (
-      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.class}`}>
-        {config.text}
-      </span>
-    );
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
+
+  // Ícones para os KPIs
+  const kpiIcons = {
+    total: (
+      <svg className="h-6 w-6 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      </svg>
+    ),
+    urgent: (
+      <svg className="h-6 w-6 text-red-600 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+    ),
+    inProgress: (
+      <svg className="h-6 w-6 text-yellow-600 dark:text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    closed: (
+      <svg className="h-6 w-6 text-green-600 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    )
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -118,13 +110,13 @@ export default function DemandsPage() {
               <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
                 <a 
                   href="/dashboard" 
-                  className="text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
+                  className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
                 >
                   Dashboard
                 </a>
                 <a 
                   href="/demands" 
-                  className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
                 >
                   Demandas
                 </a>
@@ -133,14 +125,14 @@ export default function DemandsPage() {
             <div className="flex items-center">
               <div className="flex items-center space-x-4">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {user?.name}
+                  Olá, {user?.name}
                 </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-100">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
                   {user?.role === 'hr' ? 'RH' : 'Funcionário'}
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                 >
                   Sair
                 </button>
@@ -153,114 +145,43 @@ export default function DemandsPage() {
       {/* Conteúdo Principal */}
       <main className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Minhas Demandas</h1>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Gerencie todas as suas solicitações de RH
-              </p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Dashboard</h1>
+          
+          {/* KPIs Cards */}
+          {metrics && (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+              <KPICard 
+                title="Total de Demandas" 
+                value={metrics.total} 
+                icon={kpiIcons.total} 
+                colorClass="bg-indigo-100 dark:bg-indigo-900/30" 
+              />
+              <KPICard 
+                title="Demandas Urgentes" 
+                value={metrics.byPriority.urgent} 
+                icon={kpiIcons.urgent} 
+                colorClass="bg-red-100 dark:bg-red-900/30" 
+              />
+              <KPICard 
+                title="Em Progresso" 
+                value={metrics.byStatus.in_progress} 
+                icon={kpiIcons.inProgress} 
+                colorClass="bg-yellow-100 dark:bg-yellow-900/30" 
+              />
+              <KPICard 
+                title="Fechadas" 
+                value={metrics.byStatus.closed} 
+                icon={kpiIcons.closed} 
+                colorClass="bg-green-100 dark:bg-green-900/30" 
+              />
             </div>
-            <button
-              onClick={() => router.push('/demands/new')}
-              className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
-            >
-              <svg className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              Nova Demanda
-            </button>
-          </div>
-
-          {/* Tabela de Demandas */}
-          <div className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden transition-all duration-300">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
-                  <tr>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Tipo
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Descrição
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Prioridade
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th scope="col" className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                      Data
-                    </th>
-                    <th scope="col" className="relative px-6 py-4">
-                      <span className="sr-only">Ações</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                  {demands.length > 0 ? (
-                    demands.map((demand) => (
-                      <tr 
-                        key={demand.id} 
-                        className="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors duration-150"
-                      >
-                        <td className="px-6 py-5 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                          {demand.type}
-                        </td>
-                        <td className="px-6 py-5 text-sm text-gray-700 dark:text-gray-300 max-w-md">
-                          <div className="truncate max-w-xs" title={demand.description}>
-                            {demand.description}
-                          </div>
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                          {getPriorityBadge(demand.priority)}
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                          {getStatusBadge(demand.status)}
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                          {new Date(demand.created_at).toLocaleDateString('pt-BR')}
-                        </td>
-                        <td className="px-6 py-5 whitespace-nowrap text-right text-sm font-medium">
-                          <button
-                            onClick={() => router.push(`/demands/${demand.id}`)}
-                            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 transition-colors duration-200"
-                          >
-                            Ver
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={6} className="px-6 py-12 text-center">
-                        <div className="flex flex-col items-center justify-center">
-                          <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">Nenhuma demanda encontrada</h3>
-                          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            Comece criando sua primeira demanda.
-                          </p>
-                          <div className="mt-6">
-                            <button
-                              onClick={() => router.push('/demands/new')}
-                              className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                            >
-                              <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                              </svg>
-                              Nova Demanda
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          )}
+          
+          {/* Seção de Gráficos */}
+          {metrics && <ChartSection metrics={metrics} />}
+          
+          {/* Ações Rápidas */}
+          <QuickActions userRole={user?.role} />
         </div>
       </main>
     </div>

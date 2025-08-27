@@ -1,11 +1,11 @@
 import nodemailer from 'nodemailer';
-import { Demand } from '../config/supabase'; // Corrigir caminho
+import { Demand } from '../config/supabase';
 
 export class EmailService {
   private transporter: nodemailer.Transporter;
 
   constructor() {
-    this.transporter = nodemailer.createTransport({ // Corrigido: createTransport
+    this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.EMAIL_PORT || '587'),
       secure: false,
@@ -20,7 +20,7 @@ export class EmailService {
     try {
       const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER,
+        to: process.env.EMAIL_USER, // Por enquanto, enviando para o mesmo email (pode ser configurado para RH)
         subject: `🚨 Demanda URGENTE criada: ${demand.type}`,
         html: `
           <h2>Demanda URGENTE criada no HRFlow</h2>
