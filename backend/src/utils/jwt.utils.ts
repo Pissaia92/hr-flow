@@ -7,7 +7,7 @@ interface JwtPayload {
 
 export class JwtUtils {
   private static secret = process.env.JWT_SECRET || 'hrflow_jwt_secret_key_2024';
-  private static expiresIn = process.env.JWT_EXPIRES_IN || '24h';
+  private static expiresIn = process.env.JWT_EXPIRES_IN || '180d';
 
   static generateToken(payload: JwtPayload): string {
     return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn });
