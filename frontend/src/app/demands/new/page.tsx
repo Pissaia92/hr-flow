@@ -1,66 +1,69 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useFormState } from 'react-dom';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
-export default function NewDemandPage() {
-  const [type, setType] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('normal');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
+// Tipos para o estado do formulário
+interface FormState {
+  error?: string;
+  success?: boolean;
+  demand?: any;
+}
 
-  useEffect(() => {
-    // Verificar se usuário está autenticado
+// Ação do servidor (vai ser criada separadamente)
+async function createDemand(prevState: FormState, formData: FormData): Promise<FormState> {
+  try {
     const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/login');
+      return { error: 'Não autorizado' };
     }
-  }, [router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      const response = await fetch('http://localhost:3000/demands', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          type,
-          description,
-          priority
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        router.push('/demands');
-      } else {
-        setError(data.error || 'Erro ao criar demanda');
-      }
-    } catch (err) {
-      setError('Erro de conexão com o servidor');
-    } finally {
-      setLoading(false);
+    const type = formData.get('type') as string;
+    const description = formData.get('description') as string;
+    const priority = formData.get('priority') as string;
+    
+    if (!type || !description) {
+      return { error: 'Tipo e descrição são obrigatórios' };
     }
-  };
+    
+    const response = await fetch('http://localhost:3000/demands', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        type,
+        description,
+        priority: priority || 'normal'
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      return { error: data.error || 'Erro ao criar demanda' };
+    }
+    
+    return { success: true, demand: data.demand };
+    
+  } catch (error) {
+    console.error('Erro ao criar demanda:', error);
+    return { error: 'Erro de conexão com o servidor' };
+  }
+}
 
-  const handleCancel = () => {
-    router.push('/demands');
-  };
+export default function NewDemandPage() {
+  const [state, formAction] = useFormState<FormState, FormData>(createDemand, { error: '' });
+  const router = useRouter();
+
+  // Redirecionar se sucesso
+  useEffect(() => {
+    if (state?.success) {
+      router.push('/demands');
+    }
+  }, [state, router]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -89,8 +92,8 @@ export default function NewDemandPage() {
             </div>
             <div className="flex items-center">
               <button
-                onClick={handleCancel}
-                className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                onClick={() => router.push('/demands')}
+                className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
               >
                 Voltar
               </button>
@@ -112,8 +115,8 @@ export default function NewDemandPage() {
               </p>
             </div>
             
-            <form onSubmit={handleSubmit} className="px-6 py-8 sm:p-8">
-              {error && (
+            <form action={formAction} className="px-6 py-8 sm:p-8">
+              {state?.error && (
                 <div className="mb-6 rounded-lg bg-red-50 dark:bg-red-900/20 p-4 border border-red-200 dark:border-red-800">
                   <div className="flex">
                     <div className="flex-shrink-0">
@@ -123,7 +126,7 @@ export default function NewDemandPage() {
                     </div>
                     <div className="ml-3">
                       <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
-                        {error}
+                        {state.error}
                       </h3>
                     </div>
                   </div>
@@ -138,8 +141,7 @@ export default function NewDemandPage() {
                   <div className="mt-1">
                     <select
                       id="type"
-                      value={type}
-                      onChange={(e) => setType(e.target.value)}
+                      name="type"
                       className="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm py-3 px-4 transition-colors duration-200"
                       required
                     >
@@ -160,9 +162,8 @@ export default function NewDemandPage() {
                   <div className="mt-1">
                     <textarea
                       id="description"
+                      name="description"
                       rows={5}
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
                       className="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm py-3 px-4 transition-colors duration-200"
                       placeholder="Descreva detalhadamente sua demanda..."
                       required
@@ -180,8 +181,7 @@ export default function NewDemandPage() {
                   <div className="mt-1">
                     <select
                       id="priority"
-                      value={priority}
-                      onChange={(e) => setPriority(e.target.value)}
+                      name="priority"
                       className="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm py-3 px-4 transition-colors duration-200"
                     >
                       <option value="normal">Normal</option>
@@ -198,27 +198,16 @@ export default function NewDemandPage() {
               <div className="mt-8 flex items-center justify-end space-x-4">
                 <button
                   type="button"
-                  onClick={handleCancel}
+                  onClick={() => router.push('/demands')}
                   className="inline-flex items-center px-5 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
+                  className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
                 >
-                  {loading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Criando...
-                    </>
-                  ) : (
-                    'Criar Demanda'
-                  )}
+                  Criar Demanda
                 </button>
               </div>
             </form>

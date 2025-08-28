@@ -2,15 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import DemandsTable from '@/components/DemandsTable';
-import AdvancedSearch from '@/components/AdvancedSearch';
-import ExportButton from '@/components/ExportButton';
+import DemandsTable from '@/components/demands/DemandsTable';
 
 export default function DemandsPage() {
   const [demands, setDemands] = useState<any[]>([]);
-  const [allDemands, setAllDemands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -45,6 +43,8 @@ export default function DemandsPage() {
   const loadDemands = async (token: string) => {
     try {
       setLoading(true);
+      setError('');
+      
       const endpoint = user?.role === 'hr' 
         ? 'http://localhost:3000/demands' 
         : 'http://localhost:3000/demands/me';
@@ -57,85 +57,15 @@ export default function DemandsPage() {
       
       if (response.ok) {
         const data = await response.json();
-        setAllDemands(data.demands || data);
         setDemands(data.demands || data);
+      } else {
+        setError('Erro ao carregar demandas');
       }
     } catch (error) {
       console.error('Erro ao carregar demandas:', error);
+      setError('Erro de conexão com o servidor');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSearch = async (filters: any) => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      // Construir query string
-      const queryParams = new URLSearchParams();
-      Object.keys(filters).forEach(key => {
-        if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
-          if (Array.isArray(filters[key])) {
-            filters[key].forEach((value: string) => {
-              queryParams.append(key, value);
-            });
-          } else {
-            queryParams.append(key, filters[key]);
-          }
-        }
-      });
-
-      const response = await fetch(`http://localhost:3000/demands/search?${queryParams.toString()}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setDemands(data.demands);
-      }
-    } catch (error) {
-      console.error('Erro na busca:', error);
-    }
-  };
-
-  const handleEdit = (id: string) => {
-    router.push(`/demands/${id}/edit`);
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta demanda?')) {
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
-
-      const response = await fetch(`http://localhost:3000/demands/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        // Recarregar demandas após exclusão
-        loadDemands(token);
-      } else {
-        alert('Erro ao excluir demanda');
-      }
-    } catch (error) {
-      console.error('Erro ao excluir demanda:', error);
-      alert('Erro ao excluir demanda');
     }
   };
 
@@ -187,7 +117,7 @@ export default function DemandsPage() {
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                 >
                   Sair
                 </button>
@@ -207,33 +137,37 @@ export default function DemandsPage() {
                 Gerencie todas as suas solicitações de RH
               </p>
             </div>
-            <div className="flex space-x-3">
-              <ExportButton 
-                data={demands} 
-                filename="demandas-hrflow" 
-                title="Relatório de Demandas HRFlow" 
-              />
-              <button
-                onClick={() => router.push('/demands/new')}
-                className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
-              >
-                <svg className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                </svg>
-                Nova Demanda
-              </button>
-            </div>
+            <button
+              onClick={() => router.push('/demands/new')}
+              className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
+            >
+              <svg className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+              Nova Demanda
+            </button>
           </div>
 
-          {/* Componente de Busca Avançada */}
-          <AdvancedSearch onSearch={handleSearch} />
+          {/* Mensagem de erro */}
+          {error && (
+            <div className="mb-6 rounded-lg bg-red-50 dark:bg-red-900/20 p-4 border border-red-200 dark:border-red-800">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+                    {error}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          )}
 
-          {/* Tabela de Demandas Avançada */}
-          <DemandsTable 
-            demands={demands} 
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          {/* Tabela de Demandas Profissional */}
+          <DemandsTable demands={demands} />
         </div>
       </main>
     </div>
