@@ -1,8 +1,8 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import MetricsServer from '@/components/dashboard/MetricsServer';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
@@ -15,7 +15,6 @@ export default function DashboardPage() {
       router.push('/login');
       return;
     }
-
     // Verificar perfil do usuário
     fetch('http://localhost:3000/auth/profile', {
       headers: {
@@ -111,7 +110,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </nav>
-
       {/* Conteúdo Principal */}
       <main className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
@@ -123,66 +121,10 @@ export default function DashboardPage() {
               Aqui está uma visão geral das suas atividades mais recentes
             </p>
           </div>
-
-          {/* KPIs Cards */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total de Demandas</p>
-                  <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">0</p>
-                </div>
-                <div className="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/30">
-                  <svg className="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Demandas Urgentes</p>
-                  <p className="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">0</p>
-                </div>
-                <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30">
-                  <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Em Progresso</p>
-                  <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">0</p>
-                </div>
-                <div className="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
-                  <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Fechadas</p>
-                  <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">0</p>
-                </div>
-                <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
-                  <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          
+          {/* Métricas em Tempo Real */}
+          <MetricsServer />
+          
           {/* Ações Rápidas */}
           <div className="mt-12 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
@@ -193,7 +135,7 @@ export default function DashboardPage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <Link
-                href="/demands"
+                href={user?.role === 'hr' ? '/demands?status=open' : '/demands'}
                 className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-indigo-300 dark:hover:border-indigo-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="flex-shrink-0">
@@ -206,10 +148,11 @@ export default function DashboardPage() {
                 <div className="flex-1 min-w-0">
                   <span className="absolute inset-0" aria-hidden="true"></span>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">Ver Demandas</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Gerenciar todas as demandas</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                    {user?.role === 'hr' ? 'Gerenciar demandas abertas' : 'Gerenciar minhas demandas'}
+                  </p>
                 </div>
               </Link>
-              
               <Link
                 href="/demands/new"
                 className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-green-300 dark:hover:border-green-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
@@ -227,7 +170,6 @@ export default function DashboardPage() {
                   <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Criar nova solicitação</p>
                 </div>
               </Link>
-              
               {user?.role === 'hr' && (
                 <Link
                   href="/reports"
@@ -243,7 +185,7 @@ export default function DashboardPage() {
                   <div className="flex-1 min-w-0">
                     <span className="absolute inset-0" aria-hidden="true"></span>
                     <p className="text-sm font-medium text-gray-900 dark:text-white">Relatórios</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Ver relatórios completos</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Ver demandas resolvidas</p>
                   </div>
                 </Link>
               )}

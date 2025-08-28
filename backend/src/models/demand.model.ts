@@ -18,6 +18,28 @@ export class DemandModel {
     }
   }
 
+  static async findOpen(): Promise<any[]> {
+  const { data, error } = await supabase
+    .from('demands')
+    .select('*')
+    .neq('status', 'closed')
+    .order('created_at', { ascending: false });
+  
+  if (error) throw error;
+  return data || [];
+}
+
+static async findClosed(): Promise<any[]> {
+  const { data, error } = await supabase
+    .from('demands')
+    .select('*')
+    .eq('status', 'closed')
+    .order('created_at', { ascending: false });
+  
+  if (error) throw error;
+  return data || [];
+}
+
   // Buscar todas as demandas (apenas para RH)
   static async findAll(): Promise<Demand[]> {
     try {

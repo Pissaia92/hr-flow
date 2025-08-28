@@ -1,15 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import DemandsTable from '@/components/demands/DemandsTable';
 
-export default function DemandsPage() {
+export default function ReportsPage() {
   const [demands, setDemands] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const statusFilter = searchParams.get('status');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -17,6 +15,7 @@ export default function DemandsPage() {
       router.push('/login');
       return;
     }
+    
     // Verificar perfil do usuário
     fetch('http://localhost:3000/auth/profile', {
       headers: {
@@ -27,7 +26,12 @@ export default function DemandsPage() {
     .then(data => {
       if (data.user) {
         setUser(data.user);
-        loadDemands(token);
+        // Verificar se é usuário RH
+        if (data.user.role !== 'hr') {
+          router.push('/dashboard');
+          return;
+        }
+        loadClosedDemands(token);
       } else {
         localStorage.removeItem('token');
         router.push('/login');
@@ -39,26 +43,13 @@ export default function DemandsPage() {
       router.push('/login');
       setLoading(false);
     });
-  }, [router, statusFilter]);
+  }, [router]);
 
-  const loadDemands = async (token: string) => {
+  const loadClosedDemands = async (token: string) => {
     try {
       setLoading(true);
-      
-      let endpoint;
-      if (user?.role === 'hr') {
-        // Para usuários RH, verificar se é para mostrar apenas abertas ou todas
-        if (statusFilter === 'open') {
-          endpoint = 'http://localhost:3000/demands/open';
-        } else {
-          endpoint = 'http://localhost:3000/demands';
-        }
-      } else {
-        // Para funcionários, mostrar apenas as próprias demandas
-        endpoint = 'http://localhost:3000/demands/me';
-      }
-      
-      const response = await fetch(endpoint, {
+      // Buscar todas as demandas fechadas
+      const response = await fetch('http://localhost:3000/demands/closed', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -69,7 +60,7 @@ export default function DemandsPage() {
         setDemands(data.demands || data);
       }
     } catch (error) {
-      console.error('Erro ao carregar demandas:', error);
+      console.error('Erro ao carregar demandas fechadas:', error);
     } finally {
       setLoading(false);
     }
@@ -107,9 +98,15 @@ export default function DemandsPage() {
                 </a>
                 <a 
                   href="/demands" 
-                  className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
                 >
                   Demandas
+                </a>
+                <a 
+                  href="/reports" 
+                  className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
+                >
+                  Relatórios
                 </a>
               </div>
             </div>
@@ -143,28 +140,13 @@ export default function DemandsPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                {user?.role === 'hr' 
-                  ? (statusFilter === 'open' ? 'Demandas Abertas' : 'Todas as Demandas') 
-                  : 'Minhas Demandas'}
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Relatórios</h1>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                {user?.role === 'hr' 
-                  ? (statusFilter === 'open' ? 'Demandas não resolvidas de todos os usuários' : 'Todas as demandas de todos os usuários') 
-                  : 'Gerencie todas as suas solicitações de RH'}
+                Demandas resolvidas de todos os usuários
               </p>
             </div>
-            <button
-              onClick={() => router.push('/demands/new')}
-              className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
-            >
-              <svg className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              Nova Demanda
-            </button>
           </div>
-          {/* Tabela de Demandas */}
+          {/* Tabela de Demandas Fechadas */}
           <DemandsTable demands={demands} />
         </div>
       </main>

@@ -57,7 +57,6 @@ export class DemandsController {
         message: 'Demanda criada com sucesso',
         demand
       });
-
     } catch (error) {
       console.error('Erro ao criar demanda:', error);
       return res.status(500).json({
@@ -70,11 +69,9 @@ export class DemandsController {
   static async getAll(req: Request, res: Response): Promise<Response> {
     try {
       const demands = await DemandModel.findAll();
-      
       return res.status(200).json({
         demands
       });
-
     } catch (error) {
       console.error('Erro ao buscar demandas:', error);
       return res.status(500).json({
@@ -88,11 +85,9 @@ export class DemandsController {
     try {
       const userId = req.user?.id;
       const demands = await DemandModel.findByUserId(userId);
-      
       return res.status(200).json({
         demands
       });
-
     } catch (error) {
       console.error('Erro ao buscar demandas do usuário:', error);
       return res.status(500).json({
@@ -106,17 +101,14 @@ export class DemandsController {
     try {
       const { id } = req.params;
       const demand = await DemandModel.findById(id);
-      
       if (!demand) {
         return res.status(404).json({
           error: 'Demanda não encontrada'
         });
       }
-      
       return res.status(200).json({
         demand
       });
-
     } catch (error) {
       console.error('Erro ao buscar demanda:', error);
       return res.status(500).json({
@@ -130,30 +122,27 @@ export class DemandsController {
     try {
       const { id } = req.params;
       const updates = req.body;
-      
+
       // Remover campos que não devem ser atualizados
       delete updates.id;
       delete updates.user_id;
       delete updates.created_at;
-      
+
       // Recalcular prioridade se a descrição foi atualizada
       if (updates.description && !updates.priority) {
         updates.priority = PriorityUtils.calculatePriority(updates.description);
       }
-      
+
       const demand = await DemandModel.update(id, updates);
-      
       if (!demand) {
         return res.status(404).json({
           error: 'Demanda não encontrada'
         });
       }
-      
       return res.status(200).json({
         message: 'Demanda atualizada com sucesso',
         demand
       });
-
     } catch (error) {
       console.error('Erro ao atualizar demanda:', error);
       return res.status(500).json({
@@ -166,21 +155,47 @@ export class DemandsController {
   static async delete(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      
       const demand = await DemandModel.update(id, { status: 'closed' });
-      
       if (!demand) {
         return res.status(404).json({
           error: 'Demanda não encontrada'
         });
       }
-      
       return res.status(200).json({
         message: 'Demanda fechada com sucesso'
       });
-
     } catch (error) {
       console.error('Erro ao deletar demanda:', error);
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
+    }
+  }
+
+  // Listar demandas abertas (apenas para RH)
+  static async getOpenDemands(req: Request, res: Response): Promise<Response> {
+    try {
+      const demands = await DemandModel.findOpen();
+      return res.status(200).json({
+        demands
+      });
+    } catch (error) {
+      console.error('Erro ao buscar demandas abertas:', error);
+      return res.status(500).json({
+        error: 'Erro interno do servidor'
+      });
+    }
+  }
+
+  // Listar demandas fechadas (apenas para RH)
+  static async getClosedDemands(req: Request, res: Response): Promise<Response> {
+    try {
+      const demands = await DemandModel.findClosed();
+      return res.status(200).json({
+        demands
+      });
+    } catch (error) {
+      console.error('Erro ao buscar demandas fechadas:', error);
       return res.status(500).json({
         error: 'Erro interno do servidor'
       });

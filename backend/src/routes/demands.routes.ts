@@ -77,6 +77,46 @@ router.get('/', AuthMiddleware.authenticate, AuthMiddleware.authorizeRole(['hr']
 
 /**
  * @swagger
+ * /demands/open:
+ *   get:
+ *     summary: Obtém todas as demandas abertas (apenas para RH)
+ *     tags: [Demands]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de demandas abertas
+ *       401:
+ *         description: Não autorizado
+ *       403:
+ *         description: Acesso negado
+ *       500:
+ *         description: Erro interno do servidor
+ */
+router.get('/open', AuthMiddleware.authenticate, AuthMiddleware.authorizeRole(['hr']), DemandsController.getOpenDemands);
+
+/**
+ * @swagger
+ * /demands/closed:
+ *   get:
+ *     summary: Obtém todas as demandas fechadas (apenas para RH)
+ *     tags: [Demands]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de demandas fechadas
+ *       401:
+ *         description: Não autorizado
+ *       403:
+ *         description: Acesso negado
+ *       500:
+ *         description: Erro interno do servidor
+ */
+router.get('/closed', AuthMiddleware.authenticate, AuthMiddleware.authorizeRole(['hr']), DemandsController.getClosedDemands);
+
+/**
+ * @swagger
  * /demands/me:
  *   get:
  *     summary: Lista demandas do usuário logado
@@ -194,24 +234,5 @@ router.put('/:id', AuthMiddleware.authenticate, DemandsController.update);
  *         description: Erro interno do servidor
  */
 router.delete('/:id', AuthMiddleware.authenticate, DemandsController.delete);
-
-// Adicionar rota para buscar demandas do usuário logado
-/**
- * @swagger
- * /demands/me:
- *   get:
- *     summary: Lista demandas do usuário autenticado
- *     tags: [Demands]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Demandas do usuário retornadas com sucesso
- *       401:
- *         description: Não autorizado
- *       500:
- *         description: Erro interno do servidor
- */
-router.get('/me', AuthMiddleware.authenticate, DemandsController.getByUser);
 
 export default router;
