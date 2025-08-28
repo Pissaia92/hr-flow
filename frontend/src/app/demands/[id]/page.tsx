@@ -275,23 +275,23 @@ export default function DemandDetailPage() {
             <div className="px-6 py-8 sm:p-8">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Descrição</h3>
-                  <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-4">
-                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{demand?.description}</p>
+                  <h3 className="text-lg font-semibold text-slate-950 dark:text-gray-50 mb-2">Descrição</h3>
+                  <div className="bg-gray-300 dark:bg-gray-750 rounded-lg p-4">
+                    <p className="text-gray-300 dark:text-gray-700 whitespace-pre-wrap">{demand?.description}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Prioridade</h3>
-                    <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-4">
+                    <div className="bg-gray-700 dark:bg-gray-750 rounded-lg p-4">
                       {getPriorityBadge(demand?.priority)}
                     </div>
                   </div>
 
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Status</h3>
-                    <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-4">
+                    <div className="bg-gray-700 dark:bg-gray-750 rounded-lg p-4">
                       {getStatusBadge(demand?.status)}
                     </div>
                   </div>
@@ -299,15 +299,15 @@ export default function DemandDetailPage() {
 
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Informações Adicionais</h3>
-                  <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-4">
+                  <div className="bg-gray-300 dark:bg-gray-700 rounded-lg p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">ID da Demanda</p>
-                        <p className="text-sm text-gray-900 dark:text-white">{demand?.id}</p>
+                        <p className="text-base font-medium text-gray-900 dark:text-gray-400">ID da Demanda</p>
+                        <p className="text-base text-gray-900 dark:text-white">{demand?.id}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">ID do Usuário</p>
-                        <p className="text-sm text-gray-900 dark:text-white">{demand?.user_id}</p>
+                        <p className="text-base font-medium text-gray-900 dark:text-gray-400">ID do Usuário</p>
+                        <p className="text-base text-gray-900 dark:text-white">{demand?.user_id}</p>
                       </div>
                     </div>
                   </div>
