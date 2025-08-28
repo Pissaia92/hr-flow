@@ -1,77 +1,66 @@
-// Server Component principal do dashboard
-import { cookies } from 'next/headers';
-import { jwtVerify } from 'jose';
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import MetricsServer from '@/components/dashboard/MetricsServer';
 
-// Função para verificar token JWT
-async function verifyToken(token: string) {
-  try {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'hrflow_jwt_secret_key_2024');
-    const { payload } = await jwtVerify(token, secret);
-    return payload;
-  } catch (error) {
-    return null;
-  }
-}
+export default function DashboardPage() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-// Função para buscar perfil do usuário
-async function fetchProfile(token: string) {
-  try {
-    const response = await fetch(`${process.env.BACKEND_URL || 'http://localhost:3000'}/auth/profile`, {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    // Verificar perfil do usuário
+    fetch('http://localhost:3000/auth/profile', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
-      cache: 'no-store'
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.user) {
+        setUser(data.user);
+      } else {
+        localStorage.removeItem('token');
+        router.push('/login');
+      }
+      setLoading(false);
+    })
+    .catch(() => {
+      localStorage.removeItem('token');
+      router.push('/login');
+      setLoading(false);
     });
-    
-    if (!response.ok) {
-      return null;
-    }
-    
-    const data = await response.json();
-    return data.user;
-  } catch (error) {
-    console.error('Erro ao buscar perfil:', error);
-    return null;
-  }
-}
+  }, [router]);
 
-export default async function DashboardPage() {
-  const token = cookies().get('token')?.value;
-  
-  if (!token) {
-    redirect('/login');
-  }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/login');
+  };
 
-  const payload = await verifyToken(token);
-  if (!payload) {
-    redirect('/login');
-  }
-
-  const user = await fetchProfile(token);
-  if (!user) {
-    redirect('/login');
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Cabeçalho */}
-      <nav className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+      <nav className="bg-white dark:bg-gray-800 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    HRFlow
-                  </h1>
-                </div>
+                <h1 className="text-xl font-bold text-indigo-600 dark:text-indigo-400">HRFlow</h1>
               </div>
               <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
                 <a 
@@ -90,30 +79,18 @@ export default async function DashboardPage() {
             </div>
             <div className="flex items-center">
               <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-                    </span>
-                  </div>
-                  <div className="hidden md:block">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {user?.role === 'hr' ? 'Recursos Humanos' : 'Funcionário'}
-                    </p>
-                  </div>
-                </div>
-                <span className="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {user?.name}
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
                   {user?.role === 'hr' ? 'RH' : 'Funcionário'}
                 </span>
-                <form action="/api/auth/logout" method="post">
-                  <button
-                    type="submit"
-                    className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
-                  >
-                    Sair
-                  </button>
-                </form>
+                <button
+                  onClick={handleLogout}
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                >
+                  Sair
+                </button>
               </div>
             </div>
           </div>
@@ -123,7 +100,6 @@ export default async function DashboardPage() {
       {/* Conteúdo Principal */}
       <main className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          {/* Cabeçalho do Dashboard */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               Bem-vindo de volta, <span className="text-indigo-600 dark:text-indigo-400">{user?.name}</span>
@@ -135,73 +111,6 @@ export default async function DashboardPage() {
 
           {/* Métricas Server Component - dados carregados no servidor */}
           <MetricsServer />
-
-          {/* Ações Rápidas */}
-          <div className="mt-12 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-              <svg className="w-6 h-6 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Ações Rápidas
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <a
-                href="/demands"
-                className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-indigo-300 dark:hover:border-indigo-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
-                    <svg className="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="absolute inset-0" aria-hidden="true"></span>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Ver Demandas</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Gerenciar todas as demandas</p>
-                </div>
-              </a>
-              
-              <a
-                href="/demands/new"
-                className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-green-300 dark:hover:border-green-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30">
-                    <svg className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="absolute inset-0" aria-hidden="true"></span>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Nova Demanda</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Criar nova solicitação</p>
-                </div>
-              </a>
-              
-              {user?.role === 'hr' && (
-                <a
-                  href="/reports"
-                  className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-purple-300 dark:hover:border-purple-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900/30">
-                      <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="absolute inset-0" aria-hidden="true"></span>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">Relatórios</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Ver relatórios completos</p>
-                  </div>
-                </a>
-              )}
-            </div>
-          </div>
         </div>
       </main>
     </div>

@@ -11,35 +11,36 @@ export default function LoginPage() {
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const response = await fetch('http://localhost:3000/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok) {
-        // Salvar token no localStorage
-        localStorage.setItem('token', data.token);
-        // Redirecionar para dashboard
-        router.push('/dashboard');
-      } else {
-        setError(data.error || 'Erro ao fazer login');
-      }
-    } catch (err) {
-      setError('Erro de conexão com o servidor');
-    } finally {
-      setLoading(false);
+    if (response.ok) {
+      // Salvar token no localStorage
+      localStorage.setItem('token', data.token);
+      
+      // REDIRECIONAR PARA DASHBOARD EM VEZ DE DEMANDAS
+      router.push('/dashboard'); // <- Corrigido aqui
+    } else {
+      setError(data.error || 'Erro ao fazer login');
     }
-  };
+  } catch (err) {
+    setError('Erro de conexão com o servidor');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

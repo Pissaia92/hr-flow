@@ -1,5 +1,5 @@
 'use client';
-
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import {
   useReactTable,
@@ -13,7 +13,6 @@ import {
   type PaginationState,
   type ColumnFiltersState,
 } from '@tanstack/react-table';
-import { useRouter } from 'next/navigation';
 
 interface Demand {
   id: string;
@@ -25,7 +24,13 @@ interface Demand {
   user_id: string;
 }
 
-export default function DemandsTable({ demands }: { demands: Demand[] }) {
+interface DemandsTableProps {
+  demands: Demand[];
+  onEdit?: (id: string) => void; // <- Adicionar prop onEdit
+  onDelete?: (id: string) => void; // <- Adicionar prop onDelete
+}
+
+export default function DemandsTable({ demands, onEdit, onDelete }: DemandsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({

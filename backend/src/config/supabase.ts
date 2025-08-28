@@ -30,4 +30,22 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
-console.log('✅ Supabase client inicializado');
+// Testar conexão imediatamente
+async function testSupabaseConnection() {
+  try {
+    console.log('🔍 Testando conexão com Supabase...');
+    const { data, error } = await supabase
+      .from('users')
+      .select('count', { count: 'exact', head: true });
+
+    if (error) {
+      console.error('❌ Erro na conexão com Supabase:', error);
+    } else {
+      console.log('✅ Conexão com Supabase estabelecida com sucesso');
+    }
+  } catch (error) {
+    console.error('❌ Erro ao testar conexão:', error);
+  }
+}
+
+testSupabaseConnection();
