@@ -1,17 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
-export default function EditDemandPage({ params }: { params: { id: string } }) {
+export default function EditDemandPage() {
+  const [demand, setDemand] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('normal');
   const [status, setStatus] = useState('open');
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const params = useParams();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -20,30 +22,33 @@ export default function EditDemandPage({ params }: { params: { id: string } }) {
       return;
     }
 
-    // Carregar dados da demanda
     loadDemand(token);
-  }, [params.id]);
+  }, [params.id, router]);
 
   const loadDemand = async (token: string) => {
     try {
+      setLoading(true);
+      setError('');
+      
       const response = await fetch(`http://localhost:3000/demands/${params.id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-
+      
       if (response.ok) {
         const data = await response.json();
+        setDemand(data.demand);
         setType(data.demand.type);
         setDescription(data.demand.description);
         setPriority(data.demand.priority);
         setStatus(data.demand.status);
       } else {
-        router.push('/demands');
+        const errorData = await response.json();
+        setError(errorData.error || 'Erro ao carregar demanda');
       }
-    } catch (err) {
-      console.error('Erro ao carregar demanda:', err);
-      router.push('/demands');
+    } catch (error) {
+      setError('Erro de conexão com o servidor');
     } finally {
       setLoading(false);
     }
@@ -51,7 +56,7 @@ export default function EditDemandPage({ params }: { params: { id: string } }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
+    setUpdating(true);
     setError('');
 
     try {
@@ -82,10 +87,10 @@ export default function EditDemandPage({ params }: { params: { id: string } }) {
       } else {
         setError(data.error || 'Erro ao atualizar demanda');
       }
-    } catch (err) {
+    } catch (error) {
       setError('Erro de conexão com o servidor');
     } finally {
-      setSaving(false);
+      setUpdating(false);
     }
   };
 
@@ -93,10 +98,66 @@ export default function EditDemandPage({ params }: { params: { id: string } }) {
     router.push('/demands');
   };
 
+  const handleDelete = async () => {
+    if (!confirm('Tem certeza que deseja excluir esta demanda?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:3000/demands/${params.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        router.push('/demands');
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Erro ao excluir demanda');
+      }
+    } catch (error) {
+      setError('Erro de conexão com o servidor');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="max-w-md w-full space-y-8">
+          <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6">
+            <div className="text-center">
+              <svg className="mx-auto h-12 w-12 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-white">Erro</h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{error}</p>
+              <div className="mt-6">
+                <button
+                  onClick={handleCancel}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                >
+                  Voltar para Demandas
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -129,7 +190,7 @@ export default function EditDemandPage({ params }: { params: { id: string } }) {
             <div className="flex items-center">
               <button
                 onClick={handleCancel}
-                className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
               >
                 Voltar
               </button>
@@ -141,7 +202,7 @@ export default function EditDemandPage({ params }: { params: { id: string } }) {
       {/* Conteúdo Principal */}
       <main className="max-w-3xl mx-auto py-8 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden transition-all duration-300">
+          <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl overflow-hidden transition-all duration-300">
             <div className="px-6 py-6 sm:px-8 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Editar Demanda
@@ -249,31 +310,41 @@ export default function EditDemandPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
 
-              <div className="mt-8 flex items-center justify-end space-x-4">
+              <div className="mt-8 flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={handleCancel}
-                  className="inline-flex items-center px-5 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
+                  onClick={handleDelete}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                 >
-                  Cancelar
+                  Excluir Demanda
                 </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
-                >
-                  {saving ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Salvando...
-                    </>
-                  ) : (
-                    'Salvar Alterações'
-                  )}
-                </button>
+                
+                <div className="flex items-center space-x-4">
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={updating}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 transition-colors duration-200"
+                  >
+                    {updating ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Atualizando...
+                      </>
+                    ) : (
+                      'Atualizar Demanda'
+                    )}
+                  </button>
+                </div>
               </div>
             </form>
           </div>

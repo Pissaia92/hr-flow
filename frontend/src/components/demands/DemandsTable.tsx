@@ -104,9 +104,8 @@ export default function DemandsTable({ demands, onEdit, onDelete }: DemandsTable
       cell: ({ row }) => (
         <div className="flex space-x-2">
           <button
-            onClick={() => router.push(`/demands/${row.original.id}`)}
-            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 text-sm font-medium"
-          >
+  onClick={() => router.push(`/demands/${row.original.id}`)}
+  className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 text-sm font-medium">
             Ver
           </button>
           <button

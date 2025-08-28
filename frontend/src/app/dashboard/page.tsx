@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import MetricsServer from '@/components/dashboard/MetricsServer';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
@@ -60,7 +60,16 @@ export default function DashboardPage() {
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-indigo-600 dark:text-indigo-400">HRFlow</h1>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    HRFlow
+                  </h1>
+                </div>
               </div>
               <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
                 <a 
@@ -80,14 +89,20 @@ export default function DashboardPage() {
             <div className="flex items-center">
               <div className="flex items-center space-x-4">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {user?.name}
+                  Olá, {user?.name}
                 </span>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
                   {user?.role === 'hr' ? 'RH' : 'Funcionário'}
                 </span>
+                <Link
+                  href="/profile"
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                >
+                  Perfil
+                </Link>
                 <button
                   onClick={handleLogout}
-                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
                   Sair
                 </button>
@@ -109,8 +124,131 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          {/* Métricas Server Component - dados carregados no servidor */}
-          <MetricsServer />
+          {/* KPIs Cards */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total de Demandas</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">0</p>
+                </div>
+                <div className="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/30">
+                  <svg className="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Demandas Urgentes</p>
+                  <p className="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">0</p>
+                </div>
+                <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30">
+                  <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Em Progresso</p>
+                  <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">0</p>
+                </div>
+                <div className="p-3 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
+                  <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Fechadas</p>
+                  <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">0</p>
+                </div>
+                <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/30">
+                  <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Ações Rápidas */}
+          <div className="mt-12 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+              <svg className="w-6 h-6 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Ações Rápidas
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Link
+                href="/demands"
+                className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-indigo-300 dark:hover:border-indigo-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
+                    <svg className="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="absolute inset-0" aria-hidden="true"></span>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">Ver Demandas</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Gerenciar todas as demandas</p>
+                </div>
+              </Link>
+              
+              <Link
+                href="/demands/new"
+                className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-green-300 dark:hover:border-green-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30">
+                    <svg className="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="absolute inset-0" aria-hidden="true"></span>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">Nova Demanda</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Criar nova solicitação</p>
+                </div>
+              </Link>
+              
+              {user?.role === 'hr' && (
+                <Link
+                  href="/reports"
+                  className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-purple-300 dark:hover:border-purple-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900/30">
+                      <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="absolute inset-0" aria-hidden="true"></span>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">Relatórios</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Ver relatórios completos</p>
+                  </div>
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
       </main>
     </div>

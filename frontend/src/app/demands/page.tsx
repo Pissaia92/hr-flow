@@ -104,21 +104,27 @@ export default function DemandsPage() {
               </div>
             </div>
             <div className="flex items-center">
-              <div className="flex items-center space-x-4">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {user?.name}
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
-                  {user?.role === 'hr' ? 'RH' : 'Funcionário'}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
-                >
-                  Sair
-                </button>
-              </div>
-            </div>
+  <div className="flex items-center space-x-4">
+    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+      {user?.name}
+    </span>
+    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
+      {user?.role === 'hr' ? 'RH' : 'Funcionário'}
+    </span>
+    <a
+      href="/profile"
+      className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
+    >
+      Perfil
+    </a>
+    <button
+      onClick={handleLogout}
+      className="ml-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
+    >
+      Sair
+    </button>
+  </div>
+</div>
           </div>
         </div>
       </nav>
