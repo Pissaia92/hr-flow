@@ -118,7 +118,7 @@ export default function DashboardPage() {
               Bem-vindo de volta, <span className="text-indigo-600 dark:text-indigo-400">{user?.name}</span>
             </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Aqui está uma visão geral das suas atividades mais recentes
+              Aqui está uma visão geral das atividades mais recentes
             </p>
           </div>
           
@@ -134,7 +134,7 @@ export default function DashboardPage() {
               Ações Rápidas
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Link
+               <Link
                 href={user?.role === 'hr' ? '/demands?status=open' : '/demands'}
                 className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-indigo-300 dark:hover:border-indigo-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
               >

@@ -49,9 +49,9 @@ export default function DemandsPage() {
       if (user?.role === 'hr') {
         // Para usuários RH, verificar se é para mostrar apenas abertas ou todas
         if (statusFilter === 'open') {
-          endpoint = 'http://localhost:3000/demands/open';
+          endpoint = 'http://localhost:3000/demands/open';  // Endpoint para demandas abertas de todos os usuários
         } else {
-          endpoint = 'http://localhost:3000/demands';
+          endpoint = 'http://localhost:3000/demands';  // Todas as demandas
         }
       } else {
         // Para funcionários, mostrar apenas as próprias demandas
