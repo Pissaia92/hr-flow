@@ -21,4 +21,4 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
-tk log.txt
+tklog.txt
