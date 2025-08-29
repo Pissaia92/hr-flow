@@ -106,8 +106,15 @@ export default function ProfilePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
+               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
               <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-indigo-600 dark:text-indigo-400">HRFlow</h1>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
+                    HRFlow
+                  </h1>
               </div>
               <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
                 <a 

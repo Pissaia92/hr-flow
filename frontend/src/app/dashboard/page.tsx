@@ -65,7 +65,7 @@ export default function DashboardPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   </div>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
                     HRFlow
                   </h1>
                 </div>
@@ -90,12 +90,12 @@ export default function DashboardPage() {
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Olá, {user?.name}
                 </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-500 dark:bg-indigo-900/30 dark:text-indigo-100">
                   {user?.role === 'hr' ? 'RH' : 'Funcionário'}
                 </span>
                 <Link
                   href="/profile"
-                  className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                  className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                 >
                   Perfil
                 </Link>
@@ -117,7 +117,7 @@ export default function DashboardPage() {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               Bem-vindo de volta, <span className="text-indigo-600 dark:text-indigo-400">{user?.name}</span>
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+            <p className="mt-2 text-gray-500 dark:text-gray-400">
               Aqui está uma visão geral das atividades mais recentes
             </p>
           </div>
@@ -136,7 +136,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                <Link
                 href={user?.role === 'hr' ? '/demands?status=open' : '/demands'}
-                className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-indigo-300 dark:hover:border-indigo-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
+                className="relative rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 px-6 py-5 shadow-sm flex items-center space-x-4 hover:border-indigo-300 dark:hover:border-indigo-500 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-400 dark:focus-within:ring-offset-gray-800 transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="flex-shrink-0">
                   <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
@@ -148,7 +148,7 @@ export default function DashboardPage() {
                 <div className="flex-1 min-w-0">
                   <span className="absolute inset-0" aria-hidden="true"></span>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">Ver Demandas</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                  <p className="text-sm text-gray-300 dark:text-gray-300 truncate">
                     {user?.role === 'hr' ? 'Gerenciar demandas abertas' : 'Gerenciar minhas demandas'}
                   </p>
                 </div>
@@ -167,7 +167,7 @@ export default function DashboardPage() {
                 <div className="flex-1 min-w-0">
                   <span className="absolute inset-0" aria-hidden="true"></span>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">Nova Demanda</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Criar nova solicitação</p>
+                  <p className="text-sm text-gray-300 dark:text-gray-300 truncate">Criar nova solicitação</p>
                 </div>
               </Link>
               {user?.role === 'hr' && (
@@ -185,7 +185,7 @@ export default function DashboardPage() {
                   <div className="flex-1 min-w-0">
                     <span className="absolute inset-0" aria-hidden="true"></span>
                     <p className="text-sm font-medium text-gray-900 dark:text-white">Relatórios</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">Ver demandas resolvidas</p>
+                    <p className="text-sm text-gray-300 dark:text-gray-300 truncate">Ver demandas resolvidas</p>
                   </div>
                 </Link>
               )}

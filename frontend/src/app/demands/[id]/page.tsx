@@ -109,7 +109,7 @@ export default function DemandDetailPage() {
                 <div className="hidden sm:ml-10 sm:flex sm:space-x-8">
                   <a 
                     href="/dashboard" 
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
+                    className="text-gray-200 dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-50 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
                   >
                     Dashboard
                   </a>
@@ -258,7 +258,7 @@ export default function DemandDetailPage() {
                 <div className="flex space-x-2">
                   <button
                     onClick={handleEdit}
-                    className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                    className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                   >
                     Editar
                   </button>
@@ -302,12 +302,12 @@ export default function DemandDetailPage() {
                   <div className="bg-gray-300 dark:bg-gray-700 rounded-lg p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <p className="text-base font-medium text-gray-900 dark:text-gray-400">ID da Demanda</p>
-                        <p className="text-base text-gray-900 dark:text-white">{demand?.id}</p>
+                        <p className="text-base font-bold text-gray-900 dark:text-gray-200">ID da Demanda</p>
+                        <p className="text-extralight text-gray-900 dark:text-white">{demand?.id}</p>
                       </div>
                       <div>
-                        <p className="text-base font-medium text-gray-900 dark:text-gray-400">ID do Usuário</p>
-                        <p className="text-base text-gray-900 dark:text-white">{demand?.user_id}</p>
+                        <p className="text-base font-bold text-gray-900 dark:text-gray-200">ID do Usuário</p>
+                        <p className="text-extralight text-gray-900 dark:text-white">{demand?.user_id}</p>
                       </div>
                     </div>
                   </div>

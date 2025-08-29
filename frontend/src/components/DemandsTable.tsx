@@ -27,31 +27,31 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
     return date.toLocaleDateString('pt-BR');
   };
 
-  // Função para obter a cor da prioridade
+  // Função para obter a cor da prioridade (mais destacada)
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'urgent':
-        return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200';
+        return 'bg-red-500 text-white dark:bg-red-600 dark:text-white';
       case 'important':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200';
+        return 'bg-orange-500 text-white dark:bg-orange-600 dark:text-white';
       case 'normal':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200';
+        return 'bg-green-500 text-white dark:bg-green-600 dark:text-white';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+        return 'bg-gray-500 text-white dark:bg-gray-600 dark:text-white';
     }
   };
 
-  // Função para obter a cor do status
+  // Função para obter a cor do status (mais destacada)
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'open':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200';
+        return 'bg-sky-300 text-white dark:bg-sky-300 dark:text-white';
       case 'in_progress':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200';
+        return 'bg-yellow-500 text-white dark:bg-yellow-600 dark:text-white';
       case 'closed':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200';
+        return 'bg-green-500 text-white dark:bg-green-600 dark:text-white';
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+        return 'bg-gray-500 text-white dark:bg-gray-600 dark:text-white';
     }
   };
 
@@ -76,7 +76,7 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
         <div className="mt-6">
           <button
             onClick={() => router.push('/demands/new')}
-            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+            className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 dark:focus:ring-offset-gray-800"
           >
             <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
@@ -148,13 +148,13 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
                   {demand.description}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getPriorityColor(demand.priority)}`}>
+                  <span className={`px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full ${getPriorityColor(demand.priority)}`}>
                     {demand.priority === 'urgent' ? 'Urgente' : 
                      demand.priority === 'important' ? 'Importante' : 'Normal'}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(demand.status)}`}>
+                  <span className={`px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full ${getStatusColor(demand.status)}`}>
                     {demand.status === 'open' ? 'Aberta' : 
                      demand.status === 'in_progress' ? 'Em Progresso' : 'Fechada'}
                   </span>

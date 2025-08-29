@@ -22,7 +22,6 @@ import {
   Radar
 } from 'recharts';
 
-// Cores personalizadas para tema profissional
 const COLORS = {
   primary: '#6366f1',    // Indigo
   secondary: '#8b5cf6',  // Violet
@@ -109,7 +108,7 @@ export default function EnhancedCharts({ metrics }: EnhancedChartsProps) {
           </div>
         </div>
 
-        {/* Card com mini gráfico de pizza */}
+        {/* Card com mini gráfico */}
         <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
           <div className="flex justify-between items-start">
             <div>
