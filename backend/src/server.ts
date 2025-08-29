@@ -1,70 +1,23 @@
+import express from 'express';
+import cors from 'cors';
+import { routes } from '../src/routes';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-import express, { Application, Request, Response } from 'express';
-import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
-import { specs } from './config/swagger';
-import authRoutes from './routes/auth.routes';
-import demandsRoutes from './routes/demands.routes';
-import metricsRoutes from './routes/metrics.routes';
+const app = express();
 
-const app: Application = express();
-const PORT = process.env.PORT || 3000;
+app.use(cors());
+app.use(express.json());
+app.use(routes);
 
-// Middlewares
-app.use(cors({
-  origin: 'http://localhost:3001', 
-  credentials: true
-}));
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }))
+// Exporta o app para testes
+export { app };
 
-// Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-// Rota de teste
-app.get('/', (req: Request, res: Response) => {
-  res.json({ 
-    message: 'HRFlow API está rodando!',
-    version: '1.0.0',
-    documentation: '/api-docs'
+// Só inicia o servidor se não estiver em teste
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3333;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
-});
-
-// Rota de health check
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ 
-    status: 'OK',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Rotas
-app.use('/auth', authRoutes);
-app.use('/demands', demandsRoutes);
-app.use('/metrics', metricsRoutes);
-
-// Middleware de tratamento de erros
-app.use((err: any, req: Request, res: Response, next: any) => {
-  console.error('Erro não tratado:', err);
-  res.status(500).json({
-    error: 'Erro interno do servidor'
-  });
-});
-
-// Middleware para rotas não encontradas
-app.use('*', (req: Request, res: Response) => {
-  res.status(404).json({
-    error: 'Rota não encontrada'
-  });
-});
-
-// Inicia o servidor
-app.listen(PORT, () => {
-  console.log(`🚀 HRFlow Backend rodando na porta ${PORT}`);
-  console.log(`📝 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📚 Documentação: http://localhost:${PORT}/api-docs`);
-});
-
-export default app;
+}
