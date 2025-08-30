@@ -11,8 +11,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://Pissaia92.github.io',
-  baseUrl: '/hrflow/',
+  url: 'https://hr-flow-njim2zjun-carlos-pissaia-juniors-projects.vercel.app',
+  baseUrl: '/',
   organizationName: 'Pissaia92',
   projectName: 'hrflow',
 
