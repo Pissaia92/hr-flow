@@ -11,9 +11,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://your-docusaurus-site.example.com',
-  baseUrl: '/',
-
+  url: 'https://Pissaia92.github.io',
+  baseUrl: '/hrflow/',
   organizationName: 'Pissaia92',
   projectName: 'hrflow',
 
