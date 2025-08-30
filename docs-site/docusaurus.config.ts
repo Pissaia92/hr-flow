@@ -14,7 +14,7 @@ const config: Config = {
   url: 'https://hr-flow-njim2zjun-carlos-pissaia-juniors-projects.vercel.app',
   baseUrl: '/',
   organizationName: 'Pissaia92',
-  projectName: 'hrflow',
+  projectName: 'hr-flow',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -31,7 +31,7 @@ const config: Config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.ts'),
           routeBasePath: '/',
-          editUrl: 'https://github.com/Pissaia92/hrflow/edit/main/',
+          editUrl: 'https://github.com/Pissaia92/hr-flow/edit/main/',
         },
         blog: {
           showReadingTime: true,
@@ -60,7 +60,7 @@ const config: Config = {
       },
       items: [
         { to: '/', label: 'Documents', position: 'left' },
-        { href: 'https://github.com/Pissaia92/hrflow', label: 'GitHub', position: 'right' },
+        { href: 'https://github.com/Pissaia92/hr-flow', label: 'GitHub', position: 'right' },
       ],
     },
     footer: {
@@ -72,7 +72,7 @@ const config: Config = {
         },
         {
           title: 'Código',
-          items: [{ label: 'Repositório GitHub', href: 'https://github.com/Pissaia92/hrflow' }],
+          items: [{ label: 'Repositório GitHub', href: 'https://github.com/Pissaia92/hr-flow' }],
         },
       ],
       copyright: `© ${new Date().getFullYear()} HRFlow. Todos os direitos reservados.`,
