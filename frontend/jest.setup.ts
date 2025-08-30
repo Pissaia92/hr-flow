@@ -1,10 +1,14 @@
+/**
+ *  Jest Setup File
+ *   Configurações globais para testes
+ */
+
 import '@testing-library/jest-dom';
 
-// Mock do localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
+// Mock de funções globais
+global.console = {
+  ...console,
+  log: jest.fn(),     //  Mock console.log para não poluir output
+  error: jest.fn(),
+  warn: jest.fn(),
 };
-global.localStorage = localStorageMock as any;

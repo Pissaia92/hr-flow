@@ -1,6 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Tipos para o nosso projeto
 export interface User {
   id?: string;
   name: string;
@@ -30,22 +29,27 @@ if (!supabaseUrl || !supabaseKey) {
 
 export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
-// Testar conexão imediatamente
-async function testSupabaseConnection() {
-  try {
-    console.log('🔍 Testando conexão com Supabase...');
-    const { data, error } = await supabase
-      .from('users')
-      .select('count', { count: 'exact', head: true });
+// Função de teste, descomentar para testes.
 
-    if (error) {
-      console.error('❌ Erro na conexão com Supabase:', error);
-    } else {
-      console.log('✅ Conexão com Supabase estabelecida com sucesso');
-    }
-  } catch (error) {
-    console.error('❌ Erro ao testar conexão:', error);
-  }
-}
+// export async function testSupabaseConnection(): Promise<boolean> {
+//   try {
+//     console.log('🔍 Testando conexão com Supabase...');
+//     const { data, error } = await supabase
+//       .from('users')
+//       .select('count', { count: 'exact', head: true });
 
-testSupabaseConnection();
+//     if (error) {
+//       console.error('❌ Erro na conexão com Supabase:', error.message);
+//       return false;
+//     } else {
+//       console.log('✅ Conexão com Supabase estabelecida com sucesso');
+//       return true;
+//     }
+//   } catch (error) {
+//     console.error('❌ Erro ao testar conexão:', error);
+//     return false;
+//   }
+// }
+
+// Apenas para testes - Não executar automaticamente!
+// testSupabaseConnection();

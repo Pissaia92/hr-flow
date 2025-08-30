@@ -1,0 +1,4 @@
+text
+src/**/*.d.ts
+dist/
+coverage/

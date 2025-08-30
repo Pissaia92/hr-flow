@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { app } from '../src/server';
+import { app } from '../server';
 
 describe('Auth API', () => {
   it('should return 404 for non-existent route', async () => {

@@ -1,3 +1,14 @@
+/**
+ * 📊 KPICard Component
+ * 
+ * 📋 Display a key performance indicator card with title and value
+ * 
+ * 🧪 Testes disponíveis em: __tests__/components/dashboard/KPICard.test.tsx
+ * 
+ * @example
+ * <KPICard title="Total Users" value="150" />
+ */
+
 'use client';
 
 import React from 'react';

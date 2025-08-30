@@ -1,20 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
+  // ...configurações atuais  
+  //  Ignora arquivos de teste durante o build
   webpack: (config, { isServer }) => {
-    // Apenas configurar fallbacks para client-side
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
-        net: false,
-        tls: false,
       };
     }
     
+    // Ignora arquivos de teste
+    config.module.rules.push({
+      test: /\.test\.(ts|tsx)$/,
+      loader: 'ignore-loader',
+    });
+    
     return config;
   },
-};
+}
 
-export default nextConfig;
+module.exports = nextConfig
