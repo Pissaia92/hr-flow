@@ -43,8 +43,8 @@ export default function NotificationBell() {
       const mockNotifications: Notification[] = [
         {
           id: '1',
-          title: 'Nova Demanda Urgente',
-          message: 'Uma nova demanda urgente foi criada: Licença Médica',
+          title: 'New Urgent Demand',
+          message: 'A new urgent demand was created: Medical License',
           type: 'warning',
           read: false,
           createdAt: new Date().toISOString(),
@@ -52,8 +52,8 @@ export default function NotificationBell() {
         },
         {
           id: '2',
-          title: 'Demanda Atualizada',
-          message: 'Sua demanda de férias foi atualizada para "Em Progresso"',
+          title: 'Demand Updated',
+          message: 'Your vacation request has been updated to "In Progress"',
           type: 'info',
           read: true,
           createdAt: new Date(Date.now() - 86400000).toISOString(), // Ontem
@@ -64,7 +64,7 @@ export default function NotificationBell() {
       setNotifications(mockNotifications);
       setUnreadCount(mockNotifications.filter(n => !n.read).length);
     } catch (error) {
-      console.error('Erro ao carregar notificações:', error);
+      console.error('Error loading notifications:', error);
     } finally {
       setIsLoading(false);
     }
@@ -78,8 +78,8 @@ export default function NotificationBell() {
     if (hasNew) {
       const newNotification: Notification = {
         id: `new-${Date.now()}`,
-        title: 'Nova Atividade',
-        message: 'Há uma nova atualização nas suas demandas',
+        title: 'New Activity',
+        message: 'There is a new update to your demands',
         type: 'info',
         read: false,
         createdAt: new Date().toISOString()
@@ -180,14 +180,14 @@ export default function NotificationBell() {
           <div className="p-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                Notificações
+                Notifications
               </h3>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
                   className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300"
                 >
-                  Marcar todas como lidas
+                  Mark as read
                 </button>
               )}
             </div>
@@ -203,9 +203,9 @@ export default function NotificationBell() {
                 <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">Nenhuma notificação</h3>
+                <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No notification</h3>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  Você está atualizado com tudo!
+                  Tou're up to date!
                 </p>
               </div>
             ) : (
@@ -240,7 +240,7 @@ export default function NotificationBell() {
                                 onClick={() => viewDemand(notification.demandId!)}
                                 className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 font-medium"
                               >
-                                Ver demanda
+                                See demand
                               </button>
                             </div>
                           )}
@@ -267,7 +267,7 @@ export default function NotificationBell() {
 
           <div className="p-4 border-t border-gray-200 dark:border-gray-700 text-center">
             <button className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 font-medium">
-              Ver todas as notificações
+              See all notifications
             </button>
           </div>
         </div>

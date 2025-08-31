@@ -75,12 +75,12 @@ export default function ProfilePage() {
 
       if (response.ok) {
         setUser(data.user);
-        setSuccess('Perfil atualizado com sucesso!');
+        setSuccess('Profile updated!');
       } else {
-        setError(data.error || 'Erro ao atualizar perfil');
+        setError(data.error || 'Update error');
       }
     } catch (error) {
-      setError('Erro de conexão com o servidor');
+      setError('Server connection error');
     } finally {
       setUpdating(false);
     }
@@ -127,13 +127,13 @@ export default function ProfilePage() {
                   href="/demands" 
                   className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
                 >
-                  Demandas
+                  Demands
                 </a>
                 <a 
                   href="/profile" 
                   className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
                 >
-                  Perfil
+                  Profile
                 </a>
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function ProfilePage() {
                   onClick={handleLogout}
                   className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                 >
-                  Sair
+                  Exit
                 </button>
               </div>
             </div>
@@ -163,10 +163,10 @@ export default function ProfilePage() {
           <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl overflow-hidden">
             <div className="px-6 py-6 sm:px-8 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Meu Perfil
+                My profile
               </h3>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Gerencie suas informações pessoais
+                Personal informations
               </p>
             </div>
             
@@ -208,7 +208,7 @@ export default function ProfilePage() {
               <form onSubmit={handleUpdateProfile} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Nome Completo
+                    Name
                   </label>
                   <div className="mt-1">
                     <input
@@ -244,14 +244,14 @@ export default function ProfilePage() {
                     onClick={() => router.push('/dashboard')}
                     className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                   >
-                    Cancelar
+                    Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updating}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 transition-colors duration-200"
                   >
-                    {updating ? 'Atualizando...' : 'Atualizar Perfil'}
+                    {updating ? 'Updanting...' : 'Update profile'}
                   </button>
                 </div>
               </form>

@@ -1,6 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { NotificationProvider } from '@/contexts/NotificationContext';
+import NotificationToast from '@/components/notifications/NotificationToast';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -10,13 +12,19 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className="dark">
-      <body className={inter.className}>{children}</body>
+    <html lang="pt-BR">
+      <body>
+        {/* Se você tiver providers como NotificationProvider */}
+        <NotificationProvider>
+          {children}
+          <NotificationToast />
+        </NotificationProvider>
+      </body>
     </html>
   );
 }

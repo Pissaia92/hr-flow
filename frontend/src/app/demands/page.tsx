@@ -154,13 +154,13 @@ export default function DemandsPage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 {user?.role === 'hr' 
-                  ? (statusFilter === 'open' ? 'Demandas Abertas' : 'Todas as Demandas') 
-                  : 'Minhas Demandas'}
+                  ? (statusFilter === 'open' ? 'Open Demands' : 'All Demands') 
+                  : 'My Demands'}
               </h1>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
                 {user?.role === 'hr' 
-                  ? (statusFilter === 'open' ? 'Demandas não resolvidas de todos os usuários' : 'Todas as demandas de todos os usuários') 
-                  : 'Gerencie todas as suas solicitações de RH'}
+                  ? (statusFilter === 'open' ? 'Unsolved demands from all users' : 'All demands from all users') 
+                  : 'Manage all your HR requests'}
               </p>
             </div>
             <button
