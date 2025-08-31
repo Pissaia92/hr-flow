@@ -4,7 +4,8 @@
 HRFlow is a full-stack web application for managing and tracking HR requests. Built as a technical portfolio project, it showcases scalable architecture, secure authentication, and real-time analytics.
 
 📘 **Technical Documentation**  
-Access the full documentation here: [https://rb.gy/gal6sx](https://rb.gy/gal6sx)
+
+**Access the full documentation here:** https://rb.gy/gal6sx
 
 ---
 
@@ -34,6 +35,17 @@ HRFlow enables HR teams and employees to submit, monitor, and prioritize interna
 
 ---
 
+## 📊 Features
+
+- Secure user registration and login  
+- Role-based access for HR and employees  
+- Real-time KPI dashboard  
+- Request filtering, prioritization, and status tracking  
+- Email alerts for urgent demands  
+- Responsive design with dark mode support  
+
+---
+
 ## 📦 Installation
 
 ```bash
@@ -46,29 +58,26 @@ npm install
 
 ## ▶️ Running the Project
 
-```bash
-# Backend
-cd backend
-npm run dev
+npm install
 
-# Frontend
-cd frontend
-npm run dev
-```
+npm run dev:both
 
----
+### Run tests
 
-## 📊 Features
+npm run test:ci
 
-- Secure user registration and login  
-- Role-based access for HR and employees  
-- Real-time KPI dashboard  
-- Request filtering, prioritization, and status tracking  
-- Email alerts for urgent demands  
-- Responsive design with dark mode support  
+### Generate mock data for demonstration
+
+npm run generate:mock-data
+
+### Build for production
+
+npm run build
+
+# Start production server
+npm start
 
 ---
-
 ## 📜 License
 This project is licensed under the MIT License.
-This project is licensed under the MIT License.
+
