@@ -117,7 +117,7 @@ export default function DemandDetailPage() {
                     href="/demands" 
                     className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
                   >
-                    Demandas
+                    Demands
                   </a>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function DemandDetailPage() {
                   onClick={handleLogout}
                   className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                 >
-                  Sair
+                  Exit
                 </button>
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function DemandDetailPage() {
                     onClick={handleBack}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                   >
-                    Voltar para Demandas
+                    return to Demands
                   </button>
                 </div>
               </div>
@@ -211,7 +211,7 @@ export default function DemandDetailPage() {
                   href="/demands" 
                   className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
                 >
-                  Demandas
+                  Demands
                 </a>
               </div>
             </div>
@@ -220,7 +220,7 @@ export default function DemandDetailPage() {
                 onClick={handleLogout}
                 className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
               >
-                Sair
+                Exit
               </button>
             </div>
           </div>
@@ -232,16 +232,16 @@ export default function DemandDetailPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Detalhes da Demanda</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Demand's details</h1>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Informações completas sobre a demanda selecionada
+                Complete information about the selected demand
               </p>
             </div>
             <button
               onClick={handleBack}
               className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
             >
-              Voltar
+              Back
             </button>
           </div>
 
@@ -252,7 +252,7 @@ export default function DemandDetailPage() {
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{demand?.type}</h2>
                   <p className="mt-2 text-gray-600 dark:text-gray-400">
-                    Criada em {demand?.created_at ? new Date(demand.created_at).toLocaleDateString('pt-BR') : 'Data não disponível'}
+                    Created in {demand?.created_at ? new Date(demand.created_at).toLocaleDateString('pt-BR') : 'Data não disponível'}
                   </p>
                 </div>
                 <div className="flex space-x-2">
@@ -260,13 +260,13 @@ export default function DemandDetailPage() {
                     onClick={handleEdit}
                     className="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                   >
-                    Editar
+                    Edit
                   </button>
                   <button
                     onClick={handleDelete}
                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                   >
-                    Excluir
+                    Exclude
                   </button>
                 </div>
               </div>
@@ -275,7 +275,7 @@ export default function DemandDetailPage() {
             <div className="px-6 py-8 sm:p-8">
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-950 dark:text-gray-50 mb-2">Descrição</h3>
+                  <h3 className="text-lg font-semibold text-slate-950 dark:text-gray-50 mb-2">Description</h3>
                   <div className="bg-gray-300 dark:bg-gray-750 rounded-lg p-4">
                     <p className="text-gray-300 dark:text-gray-700 whitespace-pre-wrap">{demand?.description}</p>
                   </div>

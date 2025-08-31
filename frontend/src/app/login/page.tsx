@@ -47,7 +47,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Faça login na sua conta
+            Login in your account
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -75,7 +75,7 @@ export default function LoginPage() {
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Senha
+                Password
               </label>
               <input
                 id="password"
@@ -103,7 +103,7 @@ export default function LoginPage() {
         </form>
         <div className="text-sm text-center">
           <a href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
-            Não tem uma conta? Registre-se
+            Dont have an account? Register now
           </a>
         </div>
       </div>

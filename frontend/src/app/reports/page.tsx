@@ -100,13 +100,13 @@ export default function ReportsPage() {
                   href="/demands" 
                   className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
                 >
-                  Demandas
+                  Demands
                 </a>
                 <a 
                   href="/reports" 
                   className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
                 >
-                  Relatórios
+                  Reports
                 </a>
               </div>
             </div>
@@ -122,13 +122,13 @@ export default function ReportsPage() {
                   href="/profile"
                   className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
-                  Perfil
+                  Profile
                 </a>
                 <button
                   onClick={handleLogout}
                   className="ml-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
-                  Sair
+                  Exit
                 </button>
               </div>
             </div>
@@ -140,9 +140,9 @@ export default function ReportsPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Relatórios</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reports</h1>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Demandas resolvidas de todos os usuários
+                Solved demands from all users
               </p>
             </div>
           </div>

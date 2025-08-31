@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'HRFlow - Sistema de Gestão de Demandas de RH',
-  description: 'Sistema completo para registro, priorização e acompanhamento de solicitações de RH',
+  title: 'HRFlow - Human Resources Demand Management System',
+  description: 'Complete system for recording, prioritizing and tracking HR requests',
 };
 
 export default function RootLayout({

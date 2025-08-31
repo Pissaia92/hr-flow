@@ -51,7 +51,7 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
         {/* Busca por texto */}
         <div className="mb-4">
           <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Buscar (tipo, descrição)
+            Search (type, description)
           </label>
           <input
             type="text"
@@ -69,7 +69,7 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
           onClick={() => setShowFilters(!showFilters)}
           className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 mb-4"
         >
-          {showFilters ? 'Ocultar filtros avançados' : 'Mostrar filtros avançados'}
+          {showFilters ? 'Hide advanced filters' : 'Show advanced filters'}
         </button>
 
         {/* Filtros avançados */}
@@ -78,7 +78,7 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
             {/* Prioridade */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Prioridade
+                Priority
               </label>
               <div className="space-y-2">
                 {['urgent', 'important', 'normal'].map(priority => (
@@ -124,12 +124,12 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
             {/* Período */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Período
+                Period
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label htmlFor="dateFrom" className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                    De
+                    From
                   </label>
                   <input
                     type="date"
@@ -141,7 +141,7 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
                 </div>
                 <div>
                   <label htmlFor="dateTo" className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                    Até
+                    To
                   </label>
                   <input
                     type="date"
@@ -157,7 +157,7 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
             {/* Ordenação */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Ordenar por
+                Order by
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <select
@@ -165,10 +165,10 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
                   onChange={(e) => handleInputChange('sortBy', e.target.value)}
                   className="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm"
                 >
-                  <option value="">Padrão</option>
-                  <option value="created_at">Data</option>
-                  <option value="type">Tipo</option>
-                  <option value="priority">Prioridade</option>
+                  <option value="">Standard</option>
+                  <option value="created_at">Date</option>
+                  <option value="type">Type</option>
+                  <option value="priority">Priority</option>
                   <option value="status">Status</option>
                 </select>
                 <select
@@ -176,8 +176,8 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
                   onChange={(e) => handleInputChange('sortOrder', e.target.value as 'asc' | 'desc')}
                   className="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm"
                 >
-                  <option value="desc">Descendente</option>
-                  <option value="asc">Ascendente</option>
+                  <option value="desc">Descending</option>
+                  <option value="asc">Ascendending</option>
                 </select>
               </div>
             </div>
@@ -191,13 +191,13 @@ export default function AdvancedSearch({ onSearch, initialFilters }: AdvancedSea
             onClick={handleReset}
             className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
           >
-            Limpar
+            Clean
           </button>
           <button
             type="submit"
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
           >
-            Buscar
+            Search
           </button>
         </div>
       </form>

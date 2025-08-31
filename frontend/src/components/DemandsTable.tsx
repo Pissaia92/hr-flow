@@ -69,9 +69,9 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
         <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">Nenhuma demanda encontrada</h3>
+        <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No demand found</h3>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Comece criando uma nova demanda.
+          Start by creating a new demand.
         </p>
         <div className="mt-6">
           <button
@@ -81,7 +81,7 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
             <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
             </svg>
-            Nova Demanda
+            New Demand
           </button>
         </div>
       </div>
@@ -116,22 +116,22 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">
-                Tipo
+                Type
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">
-                Descrição
+                Description
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">
-                Prioridade
+                Priority
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">
                 Status
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">
-                Data
+                Date
               </th>
               <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-800 dark:text-gray-200 uppercase tracking-wider">
-                Ações
+                Actions
               </th>
             </tr>
           </thead>
@@ -167,13 +167,13 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
                     href={`/demands/${demand.id}`} 
                     className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-4"
                   >
-                    Ver
+                    See
                   </Link>
                   <Link 
                     href={`/demands/${demand.id}/edit`} 
                     className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
                   >
-                    Editar
+                    Edit
                   </Link>
                 </td>
               </tr>
@@ -187,9 +187,9 @@ export default function DemandsTable({ demands }: DemandsTableProps) {
           <svg className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">Nenhuma demanda encontrada</h3>
+          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No demand found</h3>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Nenhum resultado para "{searchTerm}".
+            No results for "{searchTerm}".
           </p>
         </div>
       )}

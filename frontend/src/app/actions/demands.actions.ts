@@ -23,13 +23,13 @@ export async function createDemand(formData: FormData) {
   
   if (!token) {
     redirect('/login');
-    return { error: 'Não autorizado' };
+    return { error: 'Unhautorized' };
   }
 
   const payload = await verifyToken(token);
   if (!payload) {
     redirect('/login');
-    return { error: 'Token inválido' };
+    return { error: 'Invalid token' };
   }
 
   try {
@@ -40,7 +40,7 @@ export async function createDemand(formData: FormData) {
     
     // Validar dados
     if (!type || !description) {
-      return { error: 'Tipo e descrição são obrigatórios' };
+      return { error: 'Type and description are mandatories' };
     }
     
     // Chamar API backend para criar demanda
@@ -60,7 +60,7 @@ export async function createDemand(formData: FormData) {
     const data = await response.json();
     
     if (!response.ok) {
-      return { error: data.error || 'Erro ao criar demanda' };
+      return { error: data.error || 'Error creating demand' };
     }
     
     // Redirecionar para lista de demandas após sucesso
@@ -68,7 +68,7 @@ export async function createDemand(formData: FormData) {
     return { success: true, demand: data.demand };
     
   } catch (error) {
-    console.error('Erro ao criar demanda:', error);
-    return { error: 'Erro de conexão com o servidor' };
+    console.error('Error creating demand:', error);
+    return { error: 'Server error' };
   }
 }

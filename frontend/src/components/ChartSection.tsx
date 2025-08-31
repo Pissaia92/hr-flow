@@ -27,19 +27,19 @@ export default function ChartSection({ metrics }: ChartSectionProps) {
       {/* Gráficos de Prioridade e Status */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 mb-8">
         <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 transition-all duration-300">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Demandas por Prioridade</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Priority Demands</h2>
           <PriorityChart data={priorityData} />
         </div>
         
         <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 transition-all duration-300">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Demandas por Status</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Status Demands</h2>
           <StatusChart data={statusData} />
         </div>
       </div>
       
       {/* Gráfico de Evolução */}
       <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 mb-8 transition-all duration-300">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Evolução Mensal</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Monthly Evolution</h2>
         <EvolutionChart data={metrics.evolution} />
       </div>
     </>

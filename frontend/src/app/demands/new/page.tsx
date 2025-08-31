@@ -16,7 +16,7 @@ async function createDemand(prevState: FormState, formData: FormData): Promise<F
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      return { error: 'Não autorizado' };
+      return { error: 'Unauthorized' };
     }
 
     const type = formData.get('type') as string;
@@ -24,7 +24,7 @@ async function createDemand(prevState: FormState, formData: FormData): Promise<F
     const priority = formData.get('priority') as string;
     
     if (!type || !description) {
-      return { error: 'Tipo e descrição são obrigatórios' };
+      return { error: 'Type and description are mandatory' };
     }
     
     const response = await fetch('http://localhost:3000/demands', {
@@ -86,7 +86,7 @@ export default function NewDemandPage() {
                   href="/demands" 
                   className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
                 >
-                  Demandas
+                  Demands
                 </a>
               </div>
             </div>
@@ -95,7 +95,7 @@ export default function NewDemandPage() {
                 onClick={() => router.push('/demands')}
                 className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
               >
-                Voltar
+                Back
               </button>
             </div>
           </div>
@@ -108,10 +108,10 @@ export default function NewDemandPage() {
           <div className="bg-white dark:bg-gray-800 shadow-xl rounded-xl overflow-hidden transition-all duration-300">
             <div className="px-6 py-6 sm:px-8 border-b border-gray-200 dark:border-gray-700">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Nova Demanda
+                New Demand
               </h3>
               <p className="mt-2 text-gray-600 dark:text-gray-400">
-                Preencha os detalhes da sua nova demanda
+                Fill details of your new demand
               </p>
             </div>
             
@@ -136,7 +136,7 @@ export default function NewDemandPage() {
               <div className="space-y-6">
                 <div>
                   <label htmlFor="type" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Tipo de Demanda
+                    Demand type
                   </label>
                   <div className="mt-1">
                     <select
@@ -145,19 +145,19 @@ export default function NewDemandPage() {
                       className="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm py-3 px-4 transition-colors duration-200"
                       required
                     >
-                      <option value="">Selecione um tipo</option>
-                      <option value="Férias">Férias</option>
-                      <option value="Licença Médica">Licença Médica</option>
-                      <option value="Treinamento">Treinamento</option>
-                      <option value="Benefícios">Benefícios</option>
-                      <option value="Outro">Outro</option>
+                      <option value="">Choose one type</option>
+                      <option value="Férias">Vacancy</option>
+                      <option value="Licença Médica">Medical License</option>
+                      <option value="Treinamento">Trainings</option>
+                      <option value="Benefícios">Benefits</option>
+                      <option value="Outro">Other</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
                   <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Descrição
+                    Description
                   </label>
                   <div className="mt-1">
                     <textarea
@@ -170,13 +170,13 @@ export default function NewDemandPage() {
                     />
                   </div>
                   <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    Se incluir palavras como "urgente" ou "imediato", a prioridade será definida automaticamente.
+                    If you include words like "urgent" or "immediate," the priority will be set automatically.
                   </p>
                 </div>
 
                 <div>
                   <label htmlFor="priority" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Prioridade
+                    Priority
                   </label>
                   <div className="mt-1">
                     <select
@@ -185,12 +185,12 @@ export default function NewDemandPage() {
                       className="block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm py-3 px-4 transition-colors duration-200"
                     >
                       <option value="normal">Normal</option>
-                      <option value="important">Importante</option>
-                      <option value="urgent">Urgente</option>
+                      <option value="important">Important</option>
+                      <option value="urgent">Urgent</option>
                     </select>
                   </div>
                   <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    A prioridade pode ser ajustada automaticamente com base na descrição.
+                    Priority can be automatically adjusted based on description.
                   </p>
                 </div>
               </div>
@@ -201,13 +201,13 @@ export default function NewDemandPage() {
                   onClick={() => router.push('/demands')}
                   className="inline-flex items-center px-5 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
-                  Cancelar
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200 transform hover:scale-105"
                 >
-                  Criar Demanda
+                  Create Demand
                 </button>
               </div>
             </form>

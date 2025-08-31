@@ -2,7 +2,7 @@ export class ExportService {
   // Exportar para CSV
   static exportToCSV(data: any[], filename: string) {
     if (!data || data.length === 0) {
-      console.warn('Nenhum dado para exportar');
+      console.warn('Nothin to export');
       return;
     }
 
@@ -38,15 +38,10 @@ export class ExportService {
 
   // Exportar para PDF
   static async exportToPDF(data: any[], filename: string, title: string) {
-    try {
-      // Para simplificar, vamos usar a biblioteca jsPDF
-      // Na prática, você pode querer importar isso ou usar uma CDN
-      
+    try {      
       // Criar conteúdo HTML para o PDF
       const htmlContent = this.generatePDFHtml(data, title);
-      
-      // Aqui você normalmente usaria jsPDF ou html2pdf
-      // Para este exemplo, vamos criar um PDF simples usando print
+      // Simple export sample
       const printWindow = window.open('', '_blank');
       if (printWindow) {
         printWindow.document.write(`
@@ -125,15 +120,15 @@ export class ExportService {
   private static formatHeader(header: string): string {
     const headerMap: { [key: string]: string } = {
       'id': 'ID',
-      'type': 'Tipo',
-      'description': 'Descrição',
-      'priority': 'Prioridade',
+      'type': 'Type',
+      'description': 'Description',
+      'priority': 'Priority',
       'status': 'Status',
-      'created_at': 'Data de Criação',
-      'user_id': 'ID do Usuário',
-      'name': 'Nome',
+      'created_at': 'Created at',
+      'user_id': 'User ID',
+      'name': 'Name',
       'email': 'Email',
-      'role': 'Função'
+      'role': 'Role'
     };
     
     return headerMap[header] || header.charAt(0).toUpperCase() + header.slice(1).replace(/_/g, ' ');

@@ -118,7 +118,7 @@ export default function DemandsPage() {
                   href="/demands" 
                   className="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200"
                 >
-                  Demandas
+                  Demands
                 </a>
               </div>
             </div>
@@ -134,13 +134,13 @@ export default function DemandsPage() {
                   href="/profile"
                   className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
-                  Perfil
+                  Profile
                 </a>
                 <button
                   onClick={handleLogout}
                   className="ml-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
-                  Sair
+                  Exit
                 </button>
               </div>
             </div>
@@ -170,7 +170,7 @@ export default function DemandsPage() {
               <svg className="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
               </svg>
-              Nova Demanda
+              New Demand
             </button>
           </div>
           {/* Tabela de Demandas */}

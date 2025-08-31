@@ -1,0 +1,173 @@
+=== DIAGNÓSTICO DO PROJETO HRFlow ===
+Data: Sun Aug 31 08:02:24     2025
+
+📁 ESTRUTURA DE PASTAS:
+----------------------
+.
+./backend
+./backend/dist
+./backend/dist/config
+./backend/dist/controllers
+./backend/dist/middleware
+./backend/dist/models
+./backend/dist/routes
+./backend/dist/services
+./backend/dist/utils
+./backend/node_modules
+./backend/src
+./backend/src/__tests__
+./backend/src/config
+./backend/src/controllers
+./backend/src/middleware
+./backend/src/models
+./backend/src/routes
+./backend/src/services
+./backend/src/utils
+./docs-site
+./docs-site/blog
+./docs-site/blog/2021-08-26-welcome
+./docs-site/docs
+./docs-site/node_modules
+./docs-site/src
+./docs-site/src/components
+./docs-site/src/components/HomepageFeatures
+./docs-site/src/css
+./docs-site/src/pages
+./docs-site/src/plugins
+./docs-site/src/theme
+./docs-site/src/theme/Navbar
+./docs-site/static
+./docs-site/static/img
+./frontend
+./frontend/__mocks__
+./frontend/node_modules
+./frontend/public
+./frontend/src
+./frontend/src/__tests__
+./frontend/src/__tests__/components
+./frontend/src/__tests__/components/dashboard
+./frontend/src/app
+./frontend/src/app/actions
+./frontend/src/app/dashboard
+./frontend/src/app/demands
+./frontend/src/app/demands/[id]
+./frontend/src/app/demands/[id]/edit
+./frontend/src/app/demands/new
+./frontend/src/app/login
+./frontend/src/app/profile
+./frontend/src/app/register
+./frontend/src/app/reports
+./frontend/src/components
+./frontend/src/components/charts
+./frontend/src/components/dashboard
+./frontend/src/components/demands
+./frontend/src/components/notifications
+./frontend/src/components/profile
+./frontend/src/services
+./frontend/types
+./node_modules
+
+📄 ARQUIVOS PRINCIPAIS:
+----------------------
+./backend/dist/config/supabase.d.ts
+./backend/dist/config/swagger.d.ts
+./backend/dist/controllers/auth.controller.d.ts
+./backend/dist/controllers/demands.controller.d.ts
+./backend/dist/middleware/auth.middleware.d.ts
+./backend/dist/models/demand.model.d.ts
+./backend/dist/models/user.model.d.ts
+./backend/dist/routes/auth.routes.d.ts
+./backend/dist/routes/demands.routes.d.ts
+./backend/dist/routes/metrics.routes.d.ts
+./backend/dist/routes.backup.d.ts
+./backend/dist/routes.d.ts
+./backend/dist/server.d.ts
+./backend/dist/services/email.service.d.ts
+./backend/dist/services/metrics.route.d.ts
+./backend/dist/services/metrics.service.d.ts
+./backend/dist/utils/hash.utils.d.ts
+./backend/dist/utils/jwt.utils.d.ts
+./backend/dist/utils/priority.utils.d.ts
+./backend/jest.setup.ts
+
+⚙️  DEPENDÊNCIAS BACKEND:
+------------------------
+hrflow-backend@1.0.0 D:\GitProjects\hr-flow\backend
+├── @supabase/supabase-js@2.56.0
+├── @tanstack/react-table@8.21.3
+├── @types/cors@2.8.17
+├── @types/express@4.17.21
+├── @types/jest@30.0.0
+├── @types/jsonwebtoken@9.0.6
+├── @types/node@20.12.7
+├── @types/nodemailer@6.4.14
+├── @types/supertest@6.0.3
+├── @types/swagger-jsdoc@6.0.4
+├── @types/swagger-ui-express@4.1.6
+├── cors@2.8.5
+├── dotenv@16.4.5
+├── express@4.21.2
+├── jest@30.1.1
+├── jose@6.1.0
+├── jsonwebtoken@9.0.2
+├── nodemailer@6.9.13
+├── nodemon@3.1.0
+├── supertest@7.1.4
+├── swagger-jsdoc@6.2.8
+├── swagger-ui-express@5.0.0
+├── ts-jest@29.4.1
+├── ts-node@10.9.2
+└── typescript@5.4.5
+
+
+⚙️  DEPENDÊNCIAS FRONTEND:
+-------------------------
+hrflow-frontend@0.1.0 D:\GitProjects\hr-flow\frontend
+├── @babel/preset-env@7.28.3
+├── @babel/preset-react@7.27.1
+├── @babel/preset-typescript@7.27.1
+├── @headlessui/react@1.7.19
+├── @supabase/supabase-js@2.56.0
+├── @tanstack/react-table@8.21.3
+├── @testing-library/jest-dom@6.8.0
+├── @testing-library/react@16.3.0
+├── @types/jest@30.0.0
+├── @types/node@20.12.7
+├── @types/prop-types@15.7.15
+├── @types/react-dom@18.3.0
+├── @types/react@18.3.1
+├── autoprefixer@10.4.19
+├── babel-jest@30.1.1
+├── html2canvas@1.4.1
+├── identity-obj-proxy@3.0.0
+├── jest-environment-jsdom@30.1.1
+├── jest@30.1.1
+├── jose@6.1.0
+├── jspdf@3.0.2
+├── next@14.2.32
+├── postcss@8.4.38
+├── react-dom@18.3.1
+├── react@18.3.1
+├── recharts@2.15.4
+├── tailwindcss@3.4.3
+├── ts-jest@29.4.1
+└── typescript@5.4.5
+
+
+🚀 SCRIPTS DISPONÍVEIS:
+----------------------
+Backend:
+  Lifecycle scripts included in hrflow-backend@1.0.0:
+  available via `npm run-script`:
+Frontend:
+  Lifecycle scripts included in hrflow-frontend@0.1.0:
+  available via `npm run-script`:
+
+📊 GIT INFO:
+-----------
+  Pre-React-Server-Components-+-Actions
+  Tanstack,-CRUD
+* after-test
+  automated-tests
+  docs-imp
+  main

@@ -16,7 +16,7 @@ export default function ExportButton({ data, filename = 'export', title = 'Relat
       setIsExporting(true);
       
       if (!data || data.length === 0) {
-        alert('Nenhum dado para exportar');
+        alert('No data to export');
         return;
       }
 
@@ -47,8 +47,8 @@ export default function ExportButton({ data, filename = 'export', title = 'Relat
       document.body.removeChild(link);
       
     } catch (error) {
-      console.error('Erro ao exportar CSV:', error);
-      alert('Erro ao exportar para CSV');
+      console.error('Erro exporting CSV:', error);
+      alert('Erro exporting CSV');
     } finally {
       setIsExporting(false);
     }
@@ -59,7 +59,7 @@ export default function ExportButton({ data, filename = 'export', title = 'Relat
       setIsExporting(true);
       
       if (!data || data.length === 0) {
-        alert('Nenhum dado para exportar');
+        alert('Nothing to export');
         return;
       }
 

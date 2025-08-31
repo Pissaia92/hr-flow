@@ -6,5 +6,9 @@
     "deploy": "docusaurus deploy",
     "build": "docusaurus build",
     "start": "docusaurus start"
+  },
+  "dependencies": {
+    "chmod": "^0.2.1",
+    "tree": "^0.1.3"
   }
 }

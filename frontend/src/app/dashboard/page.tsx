@@ -81,14 +81,14 @@ export default function DashboardPage() {
                   href="/demands" 
                   className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors duration-200"
                 >
-                  Demandas
+                  Demands
                 </a>
               </div>
             </div>
             <div className="flex items-center">
               <div className="flex items-center space-x-4">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Olá, {user?.name}
+                  Hello, {user?.name}
                 </span>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-500 dark:bg-indigo-900/30 dark:text-indigo-100">
                   {user?.role === 'hr' ? 'RH' : 'Funcionário'}
@@ -97,13 +97,13 @@ export default function DashboardPage() {
                   href="/profile"
                   className="ml-4 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
                 >
-                  Perfil
+                  Profile
                 </Link>
                 <button
                   onClick={handleLogout}
                   className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-all duration-200"
                 >
-                  Sair
+                  Exit
                 </button>
               </div>
             </div>
@@ -115,10 +115,10 @@ export default function DashboardPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Bem-vindo de volta, <span className="text-indigo-600 dark:text-indigo-400">{user?.name}</span>
+              Welcome back, <span className="text-indigo-600 dark:text-indigo-400">{user?.name}</span>
             </h1>
             <p className="mt-2 text-gray-500 dark:text-gray-400">
-              Aqui está uma visão geral das atividades mais recentes
+              Recent activities
             </p>
           </div>
           
@@ -131,7 +131,7 @@ export default function DashboardPage() {
               <svg className="w-6 h-6 mr-2 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              Ações Rápidas
+              Fast actions
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                <Link
@@ -147,7 +147,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="absolute inset-0" aria-hidden="true"></span>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Ver Demandas</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">See Demands</p>
                   <p className="text-sm text-gray-300 dark:text-gray-300 truncate">
                     {user?.role === 'hr' ? 'Gerenciar demandas abertas' : 'Gerenciar minhas demandas'}
                   </p>
@@ -166,8 +166,8 @@ export default function DashboardPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="absolute inset-0" aria-hidden="true"></span>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Nova Demanda</p>
-                  <p className="text-sm text-gray-300 dark:text-gray-300 truncate">Criar nova solicitação</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">New Demand</p>
+                  <p className="text-sm text-gray-300 dark:text-gray-300 truncate">Create new requiriment</p>
                 </div>
               </Link>
               {user?.role === 'hr' && (
@@ -184,8 +184,8 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="absolute inset-0" aria-hidden="true"></span>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">Relatórios</p>
-                    <p className="text-sm text-gray-300 dark:text-gray-300 truncate">Ver demandas resolvidas</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">Reports</p>
+                    <p className="text-sm text-gray-300 dark:text-gray-300 truncate">Solved Demands</p>
                   </div>
                 </Link>
               )}
