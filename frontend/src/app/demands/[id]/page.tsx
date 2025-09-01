@@ -149,7 +149,7 @@ export default function DemandDetailPage() {
                     onClick={handleBack}
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                   >
-                    return to Demands
+                    Return to Demands
                   </button>
                 </div>
               </div>
@@ -162,8 +162,8 @@ export default function DemandDetailPage() {
 
   const getPriorityBadge = (priority: string) => {
     const priorityMap: any = {
-      'urgent': { text: 'Urgente', class: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200' },
-      'important': { text: 'Importante', class: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200' },
+      'urgent': { text: 'Urgent', class: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200' },
+      'important': { text: 'Important', class: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200' },
       'normal': { text: 'Normal', class: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' }
     };
     
@@ -177,9 +177,9 @@ export default function DemandDetailPage() {
 
   const getStatusBadge = (status: string) => {
     const statusMap: any = {
-      'open': { text: 'Aberta', class: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' },
-      'in_progress': { text: 'Em Progresso', class: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200' },
-      'closed': { text: 'Fechada', class: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' }
+      'open': { text: 'Open', class: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200' },
+      'in_progress': { text: 'In progress', class: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200' },
+      'closed': { text: 'Closed', class: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200' }
     };
     
     const config = statusMap[status] || { text: status, class: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200' };
@@ -283,7 +283,7 @@ export default function DemandDetailPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Prioridade</h3>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Priority</h3>
                     <div className="bg-gray-700 dark:bg-gray-750 rounded-lg p-4">
                       {getPriorityBadge(demand?.priority)}
                     </div>
@@ -298,15 +298,15 @@ export default function DemandDetailPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Informações Adicionais</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Adicional informations</h3>
                   <div className="bg-gray-300 dark:bg-gray-700 rounded-lg p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <p className="text-base font-bold text-gray-900 dark:text-gray-200">ID da Demanda</p>
+                        <p className="text-base font-bold text-gray-900 dark:text-gray-200">Demand ID</p>
                         <p className="text-extralight text-gray-900 dark:text-white">{demand?.id}</p>
                       </div>
                       <div>
-                        <p className="text-base font-bold text-gray-900 dark:text-gray-200">ID do Usuário</p>
+                        <p className="text-base font-bold text-gray-900 dark:text-gray-200">User ID</p>
                         <p className="text-extralight text-gray-900 dark:text-white">{demand?.user_id}</p>
                       </div>
                     </div>

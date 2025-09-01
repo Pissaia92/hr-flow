@@ -60,7 +60,7 @@ export default function ReportsPage() {
         setDemands(data.demands || data);
       }
     } catch (error) {
-      console.error('Erro ao carregar demandas fechadas:', error);
+      console.error('Error loading solved demands:', error);
     } finally {
       setLoading(false);
     }

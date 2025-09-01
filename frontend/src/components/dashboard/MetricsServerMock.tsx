@@ -83,8 +83,8 @@ return (
 
 // Use the EnhancedChartsMock component with mock data
 return (
-<div className="space-y-8">
-<EnhancedChartsMock useMockData={true} />
-</div>
+    <div className="space-y-8">
+      <EnhancedChartsMock metrics={mockMetrics}/>
+    </div>
 );
 }
