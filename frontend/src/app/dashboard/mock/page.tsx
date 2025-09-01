@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import MetricsServer from '@/components/dashboard/MetricsServer';
+import MetricsServerMock from '@/components/dashboard/MetricsServerMock';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
@@ -120,10 +120,9 @@ export default function DashboardPage() {
             <p className="mt-2 text-gray-600 dark:text-gray-400">
               Recent activities
             </p>
-          </div>
-                          
-           <MetricsServer/>
-                          
+          </div>              
+          <MetricsServerMock />
+          
           {/* Ações Rápidas */}
           <div className="mt-12 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-2xl">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">

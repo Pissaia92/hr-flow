@@ -10,7 +10,7 @@ export default function MetricsServer() {
   const router = useRouter();
 
   useEffect(() => {
-    // Verificar se estamos no cliente antes de acessar localStorage
+    // Verificar se estou no cliente antes de acessar localStorage
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -72,7 +72,7 @@ export default function MetricsServer() {
     );
   }
 
-  // Usar o componente EnhancedCharts que já contém todos os gráficos e KPIs
+  // Usar o componente EnhancedCharts
   return (
     <div className="space-y-8">
       <EnhancedCharts metrics={metrics} />
