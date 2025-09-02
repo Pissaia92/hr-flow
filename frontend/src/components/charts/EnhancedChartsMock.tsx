@@ -83,7 +83,7 @@ export default function EnhancedChartsMock({ metrics }: EnhancedChartsProps) {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-base font-medium text-gray-200 dark:text-gray-300">Demands total</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{metrics?.total || 0}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-6">{metrics?.total || 0}</p>
               <p className="text-xs text-green-600 dark:text-green-400 mt-1">↗ 12% since lest month</p>
             </div>
             <div className="p-5 rounded-full bg-indigo-100 dark:bg-indigo-900/30">
@@ -92,7 +92,7 @@ export default function EnhancedChartsMock({ metrics }: EnhancedChartsProps) {
               </svg>
             </div>
           </div>
-          <div className="mt-4 h-16">
+          <div className="mt-0.5 h-4">
          </div>
         </div>
 
@@ -101,7 +101,7 @@ export default function EnhancedChartsMock({ metrics }: EnhancedChartsProps) {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-base font-medium text-gray-300 dark:text-2ray-400">Urgent Demands</p>
-                      <p className="text-4xl font-bold text-red-600 dark:text-red-400 mt-2">{metrics?.byPriority?.urgent || 0}</p>
+                      <p className="text-4xl font-bold text-red-600 dark:text-red-400 mt-6">{metrics?.byPriority?.urgent || 0}</p>
                       <p className="text-base text-red-600 dark:text-red-400 mt-1"> High priority</p>
                     </div>
                     <div className="p-5 rounded-full bg-red-100 dark:bg-red-900/30">
@@ -119,7 +119,7 @@ export default function EnhancedChartsMock({ metrics }: EnhancedChartsProps) {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-base font-medium text-gray-200 dark:text-gray-300">In progress</p>
-                      <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">{metrics?.byStatus?.in_progress || 0}</p>            
+                      <p className="text-4xl font-bold text-yellow-600 dark:text-yellow-400 mt-6">{metrics?.byStatus?.in_progress || 0}</p>            
                     </div>
                     <div className="p-5 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
                       <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +136,7 @@ export default function EnhancedChartsMock({ metrics }: EnhancedChartsProps) {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-base font-medium text-gray-200 dark:text-gray-300">Resolution rate</p>
-                      <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">
+                      <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-6">
                         {metrics?.byStatus?.closed ? Math.round((metrics.byStatus.closed / metrics.total) * 100) : 0}%
                       </p>
                     </div>

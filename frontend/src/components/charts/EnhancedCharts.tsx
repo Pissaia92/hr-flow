@@ -83,7 +83,7 @@ export default function EnhancedCharts({ metrics }: EnhancedChartsProps) {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-base font-medium text-gray-200 dark:text-gray-300">Demands total</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{metrics?.total || 0}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-6">{metrics?.total || 0}</p>
               <p className="text-xs text-green-600 dark:text-green-400 mt-1">↗ 12% since lest month</p>
             </div>
             <div className="p-5 rounded-full bg-indigo-100 dark:bg-indigo-900/30">
@@ -92,73 +92,64 @@ export default function EnhancedCharts({ metrics }: EnhancedChartsProps) {
               </svg>
             </div>
           </div>
-          <div className="mt-4 h-16">
-          </div>
-        </div>
-
-        {/* Card com mini gráfico */}
-        <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-base font-medium text-gray-300 dark:text-2ray-400">Urgent Demands</p>
-              <p className="text-4xl font-bold text-red-600 dark:text-red-400 mt-2">{metrics?.byPriority?.urgent || 0}</p>
-              <p className="text-base text-red-600 dark:text-red-400 mt-1"> High priority</p>
-            </div>
-            <div className="p-5 rounded-full bg-red-100 dark:bg-red-900/30">
-              <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-          </div>
-          <div className="mt-4 h-6 flex items-center justify-center">
+          <div className="mt-0.5 h-4">
          </div>
         </div>
 
-        {/* Card com mini gráfico de barra */}
-        <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-base font-medium text-gray-200 dark:text-gray-300">In progress</p>
-              <p className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mt-2">{metrics?.byStatus?.in_progress || 0}</p>            
-            </div>
-            <div className="p-5 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
-              <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-          </div>
-          <div className="mt-4 h-16">
-            {/* <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={statusData.slice(0, 2)}>
-                <Bar 
-                  dataKey="value" 
-                  fill={COLORS.warning}
-                  radius={[4, 4, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer> */}
-          </div>
-        </div>
-
-        {/* Card com mini gráfico radial */}
-        <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-base font-medium text-gray-200 dark:text-gray-300">Resolution rate</p>
-              <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">
-                {metrics?.byStatus?.closed ? Math.round((metrics.byStatus.closed / metrics.total) * 100) : 0}%
-              </p>
-            </div>
-            <div className="p-5 rounded-full bg-green-100 dark:bg-green-900/30">
-              <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-          </div>
-          <div className="mt-4 h-16 flex items-center justify-center">
-          </div>
-        </div>
-      </div>
+        {/* Card com mini gráfico */}
+                <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-base font-medium text-gray-300 dark:text-2ray-400">Urgent Demands</p>
+                      <p className="text-4xl font-bold text-red-600 dark:text-red-400 mt-6">{metrics?.byPriority?.urgent || 0}</p>
+                      <p className="text-base text-red-600 dark:text-red-400 mt-1"> High priority</p>
+                    </div>
+                    <div className="p-5 rounded-full bg-red-100 dark:bg-red-900/30">
+                      <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="mt-4 h-6 flex items-center justify-center">
+                 </div>
+                </div>
+        
+                {/* Card com mini gráfico de barra */}
+                <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-base font-medium text-gray-200 dark:text-gray-300">In progress</p>
+                      <p className="text-4xl font-bold text-yellow-600 dark:text-yellow-400 mt-6">{metrics?.byStatus?.in_progress || 0}</p>            
+                    </div>
+                    <div className="p-5 rounded-full bg-yellow-100 dark:bg-yellow-900/30">
+                      <svg className="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="mt-4 h-16">
+                  </div>
+                </div>
+        
+                {/* Card com mini gráfico radial */}
+                <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-base font-medium text-gray-200 dark:text-gray-300">Resolution rate</p>
+                      <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-6">
+                        {metrics?.byStatus?.closed ? Math.round((metrics.byStatus.closed / metrics.total) * 100) : 0}%
+                      </p>
+                    </div>
+                    <div className="p-5 rounded-full bg-green-100 dark:bg-green-900/30">
+                      <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="mt-4 h-16 flex items-center justify-center">
+                  </div>
+                </div>
+              </div>
 
       {/* Gráficos principais em grid elegante */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

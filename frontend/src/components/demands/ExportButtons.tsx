@@ -1,11 +1,10 @@
 'use client';
-// Importações necessárias do React
 import { useState, useEffect } from 'react';
 
 // Definição das props esperadas pelo componente
 interface ExportButtonsProps {
   data: any[]; // Os dados a serem exportados
-  filename?: string; // Nome base do arquivo (opcional)
+  filename?: string;
 }
 
 // Componente funcional React
@@ -14,6 +13,7 @@ export default function ExportButtons({ data, filename = 'dados_exportados' }: E
   const [includeHeaders, setIncludeHeaders] = useState(true);
   const [includeTimestamp, setIncludeTimestamp] = useState(true);
   const [notification, setNotification] = useState<{ message: string; isError: boolean } | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // Adicionado estado para isLoading
 
   // Efeito para esconder a notificação após alguns segundos
   useEffect(() => {
@@ -97,9 +97,14 @@ export default function ExportButtons({ data, filename = 'dados_exportados' }: E
     }
 
     try {
+      setIsLoading(true);
+      
       // Carregar dinamicamente as bibliotecas para melhor performance inicial
       const { jsPDF } = await import('jspdf');
-      await import('jspdf-autotable');
+      // Importa o plugin
+      const autoTableModule = await import('jspdf-autotable');
+
+      const autoTable = autoTableModule.default || autoTableModule; // Tenta ambos
 
       // Criar instância do jsPDF
       const doc = new jsPDF();
@@ -118,8 +123,7 @@ export default function ExportButtons({ data, filename = 'dados_exportados' }: E
         });
       });
 
-      // @ts-ignore - jspdf-autotable adiciona este método
-      doc.autoTable({
+      autoTable(doc, {
         head: includeHeaders ? [headers] : [],
         body: tableData,
         startY: 25,
@@ -132,10 +136,12 @@ export default function ExportButtons({ data, filename = 'dados_exportados' }: E
       // Salvar o PDF
       doc.save(getFinalFilename('pdf'));
       
-      showNotification('PDF exported!!');
+      showNotification('PDF exported!');
     } catch (error) {
       console.error('Error exporting PDF:', error);
       showNotification('Generate PDF error. Try again.', true);
+    } finally {
+      setIsLoading(false); // Garantir que o estado de carregamento seja resetado
     }
   };
 
@@ -145,19 +151,25 @@ export default function ExportButtons({ data, filename = 'dados_exportados' }: E
       <div className="flex flex-wrap gap-2">
         <button
           onClick={exportToCSV}
-          className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+          disabled={isLoading} // Desabilitar botão durante carregamento
+          className={`inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200 ${
+            isLoading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         >
           Export CSV
         </button>
         <button
           onClick={exportToPDF}
-          className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-grayar-800 transition-colors duration-200"
+          disabled={isLoading} // Desabilitar botão durante carregamento
+          className={`inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-200 ${
+            isLoading ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         >
-          Export PDF
+          {isLoading ? 'Exporting...' : 'Export PDF'}
         </button>
       </div>
 
-      {/* Opções de Configuração (Simplificadas) */}
+      {/* Opções de Configuração */}
       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700 dark:text-gray-300">
         <label className="flex items-center space-x-2">
           <input
@@ -166,7 +178,7 @@ export default function ExportButtons({ data, filename = 'dados_exportados' }: E
             onChange={(e) => setIncludeHeaders(e.target.checked)}
             className="rounded border-gray-300 dark:border-gray-600 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
           />
-          <span>Includ Headers</span>
+          <span>Include Headers</span>
         </label>
         <label className="flex items-center space-x-2">
           <input

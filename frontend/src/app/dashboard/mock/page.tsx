@@ -117,9 +117,6 @@ export default function DashboardPage() {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
               Welcome back, <span className="text-indigo-600 dark:text-indigo-400">{user?.name}</span>
             </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Recent activities
-            </p>
           </div>              
           <MetricsServerMock />
           

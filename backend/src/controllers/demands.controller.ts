@@ -4,201 +4,197 @@ import { PriorityUtils } from '../utils/priority.utils';
 import { EmailService } from '../services/email.service';
 import { UserModel } from '../models/user.model';
 
-// Instanciar o serviço de email
+// Instantiate the email service
 const emailService = new EmailService();
 
-export class DemandsController {
-  // Criar nova demanda
-  static async create(req: Request, res: Response): Promise<Response> {
-    try {
-      const { type, description, priority, status } = req.body;
-      const userId = req.user?.id;
+export class DemandsController { 
+// Create new demand 
+static async create(req: Request, res: Response): Promise<Response> { 
+try { 
+const { type, description, priority, status } = req.body; 
+const userId = req.user?.id; 
 
-      // Validação básica
-      if (!type || !description) {
-        return res.status(400).json({
-          error: 'Tipo e descrição são obrigatórios'
-        });
-      }
+// Basic Validation
+if (!type || !description) {
+return res.status(400).json({
+error: 'Type and description are required'
+});
+}
 
-      // Calcular prioridade automática se não for fornecida
-      const calculatedPriority = priority || PriorityUtils.calculatePriority(description);
+// Calculate priority automatically if not provided
+const calculatedPriority = priority || PriorityUtils.calculatePriority(description);
 
-      // Criar demanda
-      const demand = await DemandModel.create({
-        type,
-        description,
-        priority: calculatedPriority,
-        status: status || 'open',
-        user_id: userId
-      });
+// Create demand
+const demand = await DemandModel.create({
+type,
+description,
+priority: calculatedPriority,
+status: status || 'open',
+user_id: userId
+});
 
-      if (!demand) {
-        return res.status(500).json({
-          error: 'Erro ao criar demanda'
-        });
-      }
+if (!demand) {
+return res.status(500).json({
+error: 'Error creating demand'
+}); }
 
-      // Se a demanda for urgente, enviar notificação por email
-      if (calculatedPriority === 'urgent') {
-        try {
-          // Buscar informações do usuário
-          const user = await UserModel.findById(userId);
-          if (user) {
-            await emailService.sendUrgentDemandNotification(demand, user.email, user.name);
-          }
-        } catch (emailError) {
-          console.error('Erro ao enviar notificação de demanda urgente:', emailError);
-          // Não falhar a requisição por causa do email
-        }
-      }
+// If the demand is urgent, send an email notification
+if (calculatedPriority === 'urgent') {
+try {
+// Get user information
+const user = await UserModel.findById(userId);
+if (user) {
+await emailService.sendUrgentDemandNotification(demand, user.email, user.name);
+}
+} catch (emailError) {
+console.error('Error sending urgent demand notification:', emailError);
+// Don't fail the request because of the email
+}
+}
 
-      return res.status(201).json({
-        message: 'Demanda criada com sucesso',
-        demand
-      });
-    } catch (error) {
-      console.error('Erro ao criar demanda:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+return res.status(201).json({
+message: 'Demand created successfully',
+demand
+});
+} catch (error) {
+console.error('Error creating demand:', error); return res.status(500).json({
+error: 'Internal server error'
+});
+}
+}
 
-  // Listar todas as demandas (apenas para RH)
-  static async getAll(req: Request, res: Response): Promise<Response> {
-    try {
-      const demands = await DemandModel.findAll();
-      return res.status(200).json({
-        demands
-      });
-    } catch (error) {
-      console.error('Erro ao buscar demandas:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+// List all demands (HR only)
+static async getAll(req: Request, res: Response): Promise<Response> {
+try {
+const demands = await DemandModel.findAll();
+return res.status(200).json({
+demands
+});
+} catch (error) {
+console.error('Error finding demands:', error);
+return res.status(500).json({
+error: 'Internal server error'
+});
+}
+}
 
-  // Listar demandas do usuário logado
-  static async getByUser(req: Request, res: Response): Promise<Response> {
-    try {
-      const userId = req.user?.id;
-      const demands = await DemandModel.findByUserId(userId);
-      return res.status(200).json({
-        demands
-      });
-    } catch (error) {
-      console.error('Erro ao buscar demandas do usuário:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+// List demands of the logged-in user
+static async getByUser(req: Request, res: Response): Promise<Response> {
+try {
+const userId = req.user?.id;
+const demands = await DemandModel.findByUserId(userId);
+return res.status(200).json({
+demands
+});
+} catch (error) {
+console.error('Error retrieving user demands:', error);
+return res.status(500).json({
+error: 'Internal server error'
+});
+}
+}
 
-  // Buscar demanda por ID
-  static async getById(req: Request, res: Response): Promise<Response> {
-    try {
-      const { id } = req.params;
-      const demand = await DemandModel.findById(id);
-      if (!demand) {
-        return res.status(404).json({
-          error: 'Demanda não encontrada'
-        });
-      }
-      return res.status(200).json({
-        demand
-      });
-    } catch (error) {
-      console.error('Erro ao buscar demanda:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+// Search demand by ID
+static async getById(req: Request, res: Response): Promise<Response> {
+try {
+const { id } = req.params;
+const demand = await DemandModel.findById(id);
+if (!demand) {
+return res.status(404).json({
+error: 'Demand not found'
+});
+}
+return res.status(200).json({
+demand
+});
+} catch (error) {
+console.error('Error fetching demand:', error);
+return res.status(500).json({
+error: 'Internal server error'
+});
+}
+}
 
-  // Atualizar demanda
-  static async update(req: Request, res: Response): Promise<Response> {
-    try {
-      const { id } = req.params;
-      const updates = req.body;
+// Update demand
+static async update(req: Request, res: Response): Promise<Response> {
+try {
+const { id } = req.params;
+const updates = req.body;
 
-      // Remover campos que não devem ser atualizados
-      delete updates.id;
-      delete updates.user_id;
-      delete updates.created_at;
+// Remove fields that shouldn't be updated
+delete updates.id;
+delete updates.user_id;
+delete updates.created_at;
 
-      // Recalcular prioridade se a descrição foi atualizada
-      if (updates.description && !updates.priority) {
-        updates.priority = PriorityUtils.calculatePriority(updates.description);
-      }
+// Recalculate priority if description was updated
+if (updates.description && !updates.priority) {
+updates.priority = PriorityUtils.calculatePriority(updates.description);
+}
 
-      const demand = await DemandModel.update(id, updates);
-      if (!demand) {
-        return res.status(404).json({
-          error: 'Demanda não encontrada'
-        });
-      }
-      return res.status(200).json({
-        message: 'Demanda atualizada com sucesso',
-        demand
-      });
-    } catch (error) {
-      console.error('Erro ao atualizar demanda:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+const demand = await DemandModel.update(id, updates);
+if (!demand) {
+return res.status(404).json({
+error: 'Demand not found'
+});
+}
+return res.status(200).json({
+message: 'Demand updated successfully',
+demand
+});
+} catch (error) {
+console.error('Error updating demand:', error);
+return res.status(500).json({
+error: 'Internal server error'
+}); }
+}
 
-  // Deletar demanda
-  static async delete(req: Request, res: Response): Promise<Response> {
-    try {
-      const { id } = req.params;
-      const demand = await DemandModel.update(id, { status: 'closed' });
-      if (!demand) {
-        return res.status(404).json({
-          error: 'Demanda não encontrada'
-        });
-      }
-      return res.status(200).json({
-        message: 'Demanda fechada com sucesso'
-      });
-    } catch (error) {
-      console.error('Erro ao deletar demanda:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+// Delete demand
+static async delete(req: Request, res: Response): Promise<Response> {
+try {
+const { id } = req.params;
+const demand = await DemandModel.update(id, { status: 'closed' });
+if (!demand) {
+return res.status(404).json({
+error: 'Demand not found'
+});
+}
+return res.status(200).json({
+message: 'Demand closed successfully'
+});
+} catch (error) {
+console.error('Error deleting demand:', error);return res.status(500).json({
+error: 'Internal server error'
+});
+}
+}
 
-  // Listar demandas abertas (apenas para RH)
-  static async getOpenDemands(req: Request, res: Response): Promise<Response> {
-    try {
-      const demands = await DemandModel.findOpen();
-      return res.status(200).json({
-        demands
-      });
-    } catch (error) {
-      console.error('Erro ao buscar demandas abertas:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+// List open demands (HR only)
+static async getOpenDemands(req: Request, res: Response): Promise<Response> {
+try {
+const demands = await DemandModel.findOpen();
+return res.status(200).json({
+demands
+});
+} catch (error) {
+console.error('Error finding open demands:', error);
+return res.status(500).json({
+error: 'Internal server error'
+});
+}
+}
 
-  // Listar demandas fechadas (apenas para RH)
-  static async getClosedDemands(req: Request, res: Response): Promise<Response> {
-    try {
-      const demands = await DemandModel.findClosed();
-      return res.status(200).json({
-        demands
-      });
-    } catch (error) {
-      console.error('Erro ao buscar demandas fechadas:', error);
-      return res.status(500).json({
-        error: 'Erro interno do servidor'
-      });
-    }
-  }
+// List closed demands (HR only)
+static async getClosedDemands(req: Request, res: Response): Promise<Response> {
+try {
+const demands = await DemandModel.findClosed();
+return res.status(200).json({
+demands
+});
+} catch (error) {
+console.error('Error finding closed demands:', error);
+return res.status(500).json({
+error: 'Internal server error'
+});
+}
+}
 }
